@@ -1,10 +1,10 @@
 import { promises as fs } from "fs";
 import { parse, resolve } from "path";
 import { IListener } from "../typings";
-import { BotClient } from "../structures/BotClient";
+import { NecronClient } from "../structures/NecronClient";
 
 export class ListenerLoader {
-    public constructor(public client: BotClient, public path: string) {}
+    public constructor(public client: NecronClient, public path: string) {}
     public load(): void {
         fs.readdir(resolve(this.path))
             .then(async listeners => {

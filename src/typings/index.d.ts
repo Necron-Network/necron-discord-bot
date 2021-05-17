@@ -1,5 +1,5 @@
 import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, ClientEvents } from "discord.js";
-import { BotClient } from "../structures/BotClient";
+import { NecronClient } from "../structures/NecronClient";
 
 export interface IListener {
     readonly name: keyof ClientEvents;
@@ -29,7 +29,7 @@ export interface ICategoryMeta {
 
 export interface IMessage extends Message {
     public channel: ITextChannel | IDMChannel | INewsChannel;
-    client: BotClient;
+    client: NecronClient;
 }
 export interface ITextChannel extends TextChannel {
     lastMessageID: Snowflake | null;

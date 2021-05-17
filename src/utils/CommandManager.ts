@@ -1,14 +1,14 @@
 import { promises as fs } from "fs";
 import { resolve, parse } from "path";
 import { Collection, Snowflake } from "discord.js";
-import { BotClient } from "../structures/BotClient";
+import { NecronClient } from "../structures/NecronClient";
 import { ICommandComponent, ICategoryMeta, IMessage } from "../typings";
 
 export class CommandManager extends Collection<string, ICommandComponent> {
     public readonly categories: Collection<string, ICategoryMeta> = new Collection();
     public readonly aliases: Collection<string, string> = new Collection();
     private readonly cooldowns: Collection<string, Collection<Snowflake, number>> = new Collection();
-    public constructor(public client: BotClient, private readonly path: string) { super(); }
+    public constructor(public client: NecronClient, private readonly path: string) { super(); }
 
     public load(): void {
         fs.readdir(resolve(this.path))

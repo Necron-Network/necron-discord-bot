@@ -1,24 +1,20 @@
 import { DefineListener } from "../utils/decorators/DefineListener";
 import { BaseListener } from "../structures/BaseListener";
+import { MongoClient } from "mongodb";
 
 @DefineListener("ready")
 export class ReadyEvent extends BaseListener {
     public async execute(): Promise<void> {
+        const mongo = new MongoClient(process.env.MONGO_URL!, { useUnifiedTopology: true });
+        await mongo.connect(err => {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (err) this.client.logger.error("MONGODB_CONN_ERR:", err);
+            this.client.db = mongo.db(this.client.config.dbName);
+            this.client.logger.info("Connected to MongoDB cloud!");
+        });
+        await this.client.commands.load();
         this.client.logger.info(this.formatString("{username} is ready to serve {users.size} users on {guilds.size} guilds in " +
         "{textChannels.size} text channels and {voiceChannels.size} voice channels!"));
-        this.client.user?.setPresence({
-            activity: { name: this.formatString(this.client.config.presenceData.activities[0]), type: "PLAYING" },
-            status: this.client.config.presenceData.status[0]
-        }).then(() => {
-            this.client.setInterval(async () => {
-                const status = Math.floor(Math.random() * this.client.config.presenceData.status.length);
-                const activity = Math.floor(Math.random() * this.client.config.presenceData.activities.length);
-                await this.client.user?.setPresence({
-                    activity: { name: this.formatString(this.client.config.presenceData.activities[activity]), type: "PLAYING" },
-                    status: this.client.config.presenceData.status[status]
-                });
-            }, this.client.config.presenceData.interval);
-        }).catch(e => { if (e.message !== "Shards are still being spawned.") this.client.logger.error(e); });
     }
 
     public formatString(text: string): string {

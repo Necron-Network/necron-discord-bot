@@ -1,8 +1,8 @@
-import { BotClient } from "./structures/BotClient";
+import { NecronClient } from "./structures/NecronClient";
 import { clientOptions } from "./config";
 import { NoStackError } from "./utils/NoStackError";
 
-const client = new BotClient(clientOptions);
+const client = new NecronClient(clientOptions);
 
 process.on("exit", code => {
     client.logger.info(`NodeJS process exited with code ${code}`);

@@ -30,3 +30,4 @@ export const presenceData = {
     interval: 60000
 };
 export const shardsCount: number | "auto" = "auto";
+export const dbName = "";

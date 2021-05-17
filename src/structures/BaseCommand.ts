@@ -1,8 +1,8 @@
 import { ICommandComponent, IMessage } from "../typings";
-import { BotClient } from "./BotClient";
+import { NecronClient } from "./NecronClient";
 
 export class BaseCommand implements ICommandComponent {
-    public constructor(public client: BotClient, public meta: ICommandComponent["meta"]) {}
+    public constructor(public client: NecronClient, public meta: ICommandComponent["meta"]) {}
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
     public execute(message: IMessage, args: string[]): any {}
