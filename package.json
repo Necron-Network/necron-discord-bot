@@ -1,11 +1,11 @@
 {
-  "name": "discordbot-template-legacy",
+  "name": "necron-discord-bot",
   "version": "0.1.0",
   "private": true,
-  "description": "A Discord bot template made in TypeScript with discord.js",
-  "repository": "https://github.com/Hazmi35/discordbot-template-legacy",
+  "description": "Necron discord bot",
+  "repository": "https://github.com/Necron-Network/necron-discord-bot",
   "license": "AGPL-3.0",
-  "author": "Hazmi35 <contact@hzmi.xyz>",
+  "author": "Mednoob",
   "scripts": {
     "build": "npm run lint && npm run compile",
     "compile": "tsc --build tsconfig.json",
