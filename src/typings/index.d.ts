@@ -78,3 +78,9 @@ export interface INewsChannel extends NewsChannel {
     ): Promise<IMessage>;
     send(content: StringResolvable, options?: MessageOptions & { split: true | SplitOptions }): Promise<IMessage[]>;
 }
+
+export interface IAntiInvite {
+    guild: string;
+    whitelist: string[];
+    enabled: boolean;
+}

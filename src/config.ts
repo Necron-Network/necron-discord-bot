@@ -9,6 +9,7 @@ export const clientOptions: ClientOptions = {               // https://discord.j
     messageCacheMaxSize: Infinity,
     messageEditHistoryMaxSize: Infinity,
     messageSweepInterval: 300,
+    partials: ["MESSAGE", "GUILD_MEMBER", "CHANNEL", "REACTION", "USER"],
     restTimeOffset: 300,
     retryLimit: 3,
     ws: {

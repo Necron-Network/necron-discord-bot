@@ -1,5 +1,5 @@
 import { MessageEmbed, User } from "discord.js";
-import { IMessage } from "../typings";
+import { IMessage, IAntiInvite } from "../typings";
 import { DefineListener } from "../utils/decorators/DefineListener";
 import { BaseListener } from "../structures/BaseListener";
 
@@ -7,6 +7,9 @@ import { BaseListener } from "../structures/BaseListener";
 export class MessageEvent extends BaseListener {
     public async execute(message: IMessage): Promise<any> {
         if (message.author.bot || message.channel.type === "dm") return message;
+
+        const data = await this.client.db!.collection<IAntiInvite>("antiinvite").findOne({ guild: message.guild!.id });
+        if (data && (/((https|http)?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|(discordapp|discord)\.com\/invite)\/.+[a-z]/g.exec(message.content)) && !data.whitelist.some(x => message.member!.roles.cache.has(x))) return message.delete();
 
         if (message.content.startsWith(this.client.config.prefix)) return this.client.commands.handle(message);
 

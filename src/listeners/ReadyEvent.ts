@@ -13,6 +13,7 @@ export class ReadyEvent extends BaseListener {
             this.client.logger.info("Connected to MongoDB cloud!");
         });
         await this.client.commands.load();
+        this.client.memberCounter.loadInterval();
         this.client.logger.info(this.formatString("{username} is ready to serve {users.size} users on {guilds.size} guilds in " +
         "{textChannels.size} text channels and {voiceChannels.size} voice channels!"));
     }
