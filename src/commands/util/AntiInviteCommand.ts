@@ -16,7 +16,7 @@ export class AntiInviteCommand extends BaseCommand {
 
             const collection = this.client.db.collection<IAntiInvite>("antiinvite");
             let data = await collection.findOne({ guild: message.guild!.id });
-            if (data || data!.enabled) return message.channel.send(createEmbed("error", "Anti invite already enabled"));
+            if (data && data.enabled) return message.channel.send(createEmbed("error", "Anti invite already enabled"));
 
             data = {
                 guild: message.guild!.id,
@@ -35,7 +35,7 @@ export class AntiInviteCommand extends BaseCommand {
 
             const collection = this.client.db.collection<IAntiInvite>("antiinvite");
             const data = await collection.findOne({ guild: message.guild!.id });
-            if (!data || !data.enabled) return message.channel.send(createEmbed("error", "Anti invite already disabled"));
+            if (!data || (data && !data.enabled)) return message.channel.send(createEmbed("error", "Anti invite already disabled"));
 
             return collection.deleteOne({ guild: message.guild!.id }).catch(() => undefined).then(result => {
                 if (!result) return message.channel.send(createEmbed("error", "Unable to disable anti invite for your server."));
