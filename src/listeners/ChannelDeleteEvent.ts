@@ -27,7 +27,7 @@ export class ChannelDeleteEvent extends BaseListener {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete data.channels[chIndex];
 
-            return collection.updateOne({ guild: channel.guild.id }, data);
+            return collection.updateOne({ guild: channel.guild.id }, { $set: data }, { upsert: true });
         }
     }
 }

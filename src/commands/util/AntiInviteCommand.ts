@@ -58,7 +58,7 @@ export class AntiInviteCommand extends BaseCommand {
 
             if (data) {
                 data.whitelist.push(role.id);
-                result = await collection.updateOne({ guild: message.guild!.id }, data);
+                result = await collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
             } else {
                 data = {
                     guild: message.guild!.id,

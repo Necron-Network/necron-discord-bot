@@ -140,7 +140,7 @@ export class ServerStatsCommand extends BaseCommand {
                             id: newchannel.id,
                             format
                         });
-                        await collection.updateOne({ guild: message.guild!.id }, newdata);
+                        await collection.updateOne({ guild: message.guild!.id }, { $set: newdata }, { upsert: true });
                         return previewmsg.edit(createEmbed("success", "Statistic added!"));
                     }, 1000);
                 }
