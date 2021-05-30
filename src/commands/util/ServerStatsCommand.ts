@@ -92,7 +92,7 @@ export class ServerStatsCommand extends BaseCommand {
             const data = await this.client.db.collection<IMemberCounter>("membercounter").findOne({ guild: message.guild!.id });
             if (!data) return message.channel.send(createEmbed("error", `There's no server stats running in your server. Use \`${this.client.config.prefix}serverstats setup\` to create one.`));
 
-            return message.channel.send(createEmbed("info", data.channels.length ? "None." : `Here's the list of statistic shown by the server stats. If you want to delete a statistic, just delete the statistic VC.\n\n${data.channels.map((x, i) => `${i + 1}. - Format: \`${x.format}\`. Preview: \`${this.client.memberCounter.parseString(x.format, message.guild!)}\``).join("\n")}`));
+            return message.channel.send(createEmbed("info", data.channels.length <= 0 ? "None." : `Here's the list of statistic shown by the server stats. If you want to delete a statistic, just delete the statistic VC.\n\n${data.channels.map((x, i) => `${i + 1}. - Format: \`${x.format}\`. Preview: \`${this.client.memberCounter.parseString(x.format, message.guild!)}\``).join("\n")}`));
         },
         add: async (message: IMessage, args: string[]) => {
             if (!this.client.db) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
