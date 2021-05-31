@@ -14,6 +14,7 @@ export class ReadyEvent extends BaseListener {
         });
         await this.client.commands.load();
         this.client.memberCounter.loadInterval();
+        this.client.voteReminder.loadInterval();
         this.client.logger.info(this.formatString("{username} is ready to serve {users.size} users on {guilds.size} guilds in " +
         "{textChannels.size} text channels and {voiceChannels.size} voice channels!"));
     }

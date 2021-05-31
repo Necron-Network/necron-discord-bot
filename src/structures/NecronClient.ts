@@ -9,6 +9,7 @@ import { formatMS } from "../utils/formatMS";
 import { ListenerLoader } from "../utils/ListenerLoader";
 import { NecronUtils } from "../utils/NecronUtils";
 import { MemberCounterManager } from "../utils/MemberCounterManager";
+import { VoteReminder } from "../utils/VoteReminder";
 import { Db } from "mongodb";
 
 export class NecronClient extends Client {
@@ -21,6 +22,7 @@ export class NecronClient extends Client {
     public db: Db|null = null;
     public readonly utils = new NecronUtils(this);
     public readonly memberCounter = new MemberCounterManager(this);
+    public readonly voteReminder = new VoteReminder(this);
 
     public constructor(opt: ClientOptions) { super(opt); }
 
