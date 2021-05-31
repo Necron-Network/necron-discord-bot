@@ -1,5 +1,5 @@
 import { MessageEmbed, User } from "discord.js";
-import { IMessage, IAntiInvite, IAfk } from "../typings";
+import { IMessage, IAntiInvite, IAfk, ITextChannel } from "../typings";
 import { DefineListener } from "../utils/decorators/DefineListener";
 import { BaseListener } from "../structures/BaseListener";
 import { createEmbed } from "../utils/createEmbed";
@@ -15,9 +15,14 @@ export class MessageEvent extends BaseListener {
             if (message.content.split(" ").includes("--pass")) {
                 message.content = message.content.replace(" --pass", "");
             } else {
+                await ((await this.client.utils.fetchChannel(afkData.afkChannel)) as ITextChannel).messages.delete(afkData.afkMsg).catch(() => null);
                 await afkColl.deleteOne({ user: message.author.id });
 
-                await message.channel.send(createEmbed("info", `Welcome back, ${message.author.username}.`));
+                await message.channel.send(createEmbed("info", `Welcome back, ${message.author.username}.`)).catch(() => undefined).then(msg => {
+                    if (!msg) return;
+
+                    setTimeout(() => msg.delete(), 3000);
+                });
             }
         }
         void (async () => {
@@ -33,7 +38,11 @@ export class MessageEvent extends BaseListener {
 
                     if (userAfkData.attachment !== "") embed.setThumbnail(userAfkData.attachment);
 
-                    await message.channel.send(embed);
+                    await message.channel.send(embed).catch(() => undefined).then(msg => {
+                        if (!msg) return;
+
+                        setTimeout(() => msg.delete(), 5000);
+                    });
                 }
             }
         }).bind(this)();

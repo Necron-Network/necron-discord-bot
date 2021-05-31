@@ -30,21 +30,23 @@ export class AfkCommand extends BaseCommand {
             attachment = msg.attachments.first()!.url;
         }
 
+        await message.delete();
+
+        const embed = createEmbed("info", reason === "" ? undefined : reason)
+            .setTitle(`${message.author.username} is now AFK`)
+            .setThumbnail(message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))
+            .setFooter("Use --pass to bypass AFK");
+        if (attachment !== "") embed.setImage(attachment);
+        const afkMsg = await message.channel.send(embed);
+
         return collection.insertOne({
+            afkChannel: afkMsg.channel.id,
+            afkMsg: afkMsg.id,
             attachment,
             guild: message.guild!.id,
             reason,
             since: Date.now(),
             user: message.author.id
-        }).catch(() => undefined).then(async res => {
-            if (!res) return message.channel.send(createEmbed("error", "Unable to save AFK data to database. Please, try again later."));
-
-            const embed = createEmbed("info", reason === "" ? undefined : reason)
-                .setTitle(`${message.author.username} is now AFK`)
-                .setThumbnail(message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))
-                .setFooter("Use --pass to bypass AFK");
-            if (attachment !== "") embed.setImage(attachment);
-            return message.channel.send(embed);
         });
     }
 }
