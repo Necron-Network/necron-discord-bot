@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 
 type hexColorsType = "info" | "warn" | "error" | "success";
 const hexColors: Record<hexColorsType, string> = {
-    info: "#00FF00",
+    info: "#3D83F5",
     warn: "#FFFF00",
     success: "#0DFF00",
     error: "#FF0000"

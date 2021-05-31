@@ -84,3 +84,11 @@ export interface IAntiInvite {
     whitelist: string[];
     enabled: boolean;
 }
+
+export interface IAfk {
+    user: string;
+    since: number;
+    attachment: string;
+    reason: string;
+    guild: string;
+}
