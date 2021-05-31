@@ -3,7 +3,7 @@ import { ClientOptions, ClientPresenceStatus, Intents, UserResolvable } from "di
 export const defaultPrefix = ";";
 export const devs: UserResolvable[] = ["366169273485361153"]; // NOTE: Please change this
 export const clientOptions: ClientOptions = {               // https://discord.js.org/#/docs/main/stable/typedef/ClientOptions
-    allowedMentions: { parse: ["users"] },    // NOTE: Please configure these after you're using this template,
+    allowedMentions: { parse: ["users", "everyone"] },    // NOTE: Please configure these after you're using this template,
     fetchAllMembers: false,                 // especially allowedMentions, fetchAllMembers, messageCacheLifetime, messageSweepInterval, and Intents
     messageCacheLifetime: 1800,            // and the other one if you want to configure them too, but mostly, allowedMentions to Intents should do
     messageCacheMaxSize: Infinity,
