@@ -91,4 +91,6 @@ export interface IAfk {
     attachment: string;
     reason: string;
     guild: string;
+    afkChannel: string;
+    afkMsg: string;
 }
