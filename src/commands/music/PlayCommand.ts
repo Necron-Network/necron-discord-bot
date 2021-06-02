@@ -31,8 +31,7 @@ export class PlayCommand extends BaseCommand {
 
         let video: Video;
         try {
-            const id = new URL(url).searchParams.get("v")!;
-            video = await this.client.youtube.getVideo(id);
+            video = await this.client.youtube.getVideo(url);
         } catch (e) {
             try {
                 const videos = await this.client.youtube.search(searchString, { type: "video", limit: 10 });
