@@ -21,7 +21,7 @@ export class PlayCommand extends BaseCommand {
     @isValidVoiceChannel()
     @isSameVoiceChannel()
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the name or link of the video/playlist you want to play.`));
+        if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the name or link of the video you want to play.`));
 
         const voiceChannel = message.member!.voice.channel!;
         const searchString = args.join(" ");
