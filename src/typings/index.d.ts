@@ -113,3 +113,7 @@ export interface ISong {
     thumbnail: string;
     duration: number;
 }
+
+export interface INekosLifeImgResponse {
+    url: string;
+}
