@@ -30,5 +30,5 @@ export const presenceData = {
     status: ["online"] as ClientPresenceStatus[],
     interval: 60000
 };
-export const shardsCount: number | "auto" = 1;
+export const shardsCount: number | "auto" = "auto";
 export const dbName = "NecronDatabase";
