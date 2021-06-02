@@ -1,5 +1,6 @@
 import { NecronClient } from "../structures/NecronClient";
-import { Guild, VoiceChannel } from "discord.js";
+import { VoiceChannel } from "discord.js";
+import { IGuild } from "../typings";
 
 export interface IMemberCounter {
     guild: string;
@@ -29,7 +30,7 @@ export class MemberCounterManager {
         }, 60000);
     }
 
-    public parseString(str: string, guild: Guild): string {
+    public parseString(str: string, guild: IGuild): string {
         return str.replace(/{guild.member.count}/g, guild.members.cache.size.toString())
             .replace(/{guild.member.presence.online.count}/g, guild.members.cache.filter(m => m.user.presence.status === "online").size.toString())
             .replace(/{guild.member.presence.dnd.count}/g, guild.members.cache.filter(m => m.user.presence.status === "dnd").size.toString())

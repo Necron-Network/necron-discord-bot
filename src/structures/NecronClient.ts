@@ -10,7 +10,9 @@ import { ListenerLoader } from "../utils/ListenerLoader";
 import { NecronUtils } from "../utils/NecronUtils";
 import { MemberCounterManager } from "../utils/MemberCounterManager";
 import { VoteReminder } from "../utils/VoteReminder";
+import { NecronGuildManager } from "./NecronGuildManager";
 import { Db } from "mongodb";
+import Youtube from "youtube-sr";
 
 export class NecronClient extends Client {
     public readonly config = config;
@@ -23,6 +25,8 @@ export class NecronClient extends Client {
     public readonly utils = new NecronUtils(this);
     public readonly memberCounter = new MemberCounterManager(this);
     public readonly voteReminder = new VoteReminder(this);
+    public readonly youtube = Youtube;
+    public readonly guilds = new NecronGuildManager(this);
 
     public constructor(opt: ClientOptions) { super(opt); }
 

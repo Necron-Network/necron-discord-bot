@@ -1,5 +1,6 @@
-import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, ClientEvents } from "discord.js";
+import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, ClientEvents, Guild, VoiceState } from "discord.js";
 import { NecronClient } from "../structures/NecronClient";
+import { ServerQueue } from "../structures/ServerQueue";
 
 export interface IListener {
     readonly name: keyof ClientEvents;
@@ -30,6 +31,7 @@ export interface ICategoryMeta {
 export interface IMessage extends Message {
     public channel: ITextChannel | IDMChannel | INewsChannel;
     client: NecronClient;
+    guild?: IGuild;
 }
 export interface ITextChannel extends TextChannel {
     lastMessageID: Snowflake | null;
@@ -93,4 +95,21 @@ export interface IAfk {
     guild: string;
     afkChannel: string;
     afkMsg: string;
+}
+
+export interface IGuild extends Guild {
+    client: NecronClient;
+    queue?: ServerQueue;
+}
+
+export interface IVoiceState extends VoiceState {
+    guild: IGuild;
+}
+
+export interface ISong {
+    id: string;
+    title: string;
+    url: string;
+    thumbnail: string;
+    duration: number;
 }

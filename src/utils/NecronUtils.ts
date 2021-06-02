@@ -1,10 +1,11 @@
 import { NecronClient } from "../structures/NecronClient";
-import { Guild, Channel, User } from "discord.js";
+import { Channel, User } from "discord.js";
+import { IGuild } from "../typings";
 
 export class NecronUtils {
     public constructor(public readonly client: NecronClient) {}
 
-    public async fetchGuild(id: string): Promise<Guild|undefined> {
+    public async fetchGuild(id: string): Promise<IGuild|undefined> {
         return this.client.guilds.cache.get(id) ?? this.client.guilds.fetch(id).catch(() => undefined);
     }
 

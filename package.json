@@ -16,12 +16,19 @@
   },
   "main": "dist/index.js",
   "dependencies": {
-    "date-fns": "^2.21.3",
+    "date-fns": "^2.22.1",
+    "discord-ytdl-core": "^5.0.3",
     "discord.js": "^12.5.3",
+    "entities": "^2.2.0",
+    "ffmpeg-static": "^4.3.0",
     "got": "^11.8.2",
     "mongodb": "^3.6.6",
+    "pretty-ms": "^7.0.1",
+    "semver": "^7.3.5",
     "tslib": "^2.2.0",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "youtube-sr": "^4.1.1",
+    "ytdl-core": "^4.8.2"
   },
   "eslintConfig": {
     "extends": "@hazmi35/eslint-config/typescript",
@@ -33,6 +40,7 @@
     "@hazmi35/eslint-config": "^3.6.0",
     "@types/mongodb": "^3.6.12",
     "@types/node": "^15.3.0",
+    "@types/semver": "^7.3.6",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
     "dotenv": "^9.0.2",
