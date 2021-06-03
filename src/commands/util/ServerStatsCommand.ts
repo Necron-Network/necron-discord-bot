@@ -143,6 +143,8 @@ export class ServerStatsCommand extends BaseCommand {
                         await collection.updateOne({ guild: message.guild!.id }, { $set: newdata }, { upsert: true });
                         return previewmsg.edit(createEmbed("success", "Statistic added!"));
                     }, 1000);
+                } else if (reason === "cancel") {
+                    await previewmsg.edit(createEmbed("error", "Canceled"));
                 }
             });
         }
