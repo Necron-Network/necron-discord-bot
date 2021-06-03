@@ -169,3 +169,37 @@ export interface IDanbooruPost {
     large_file_url: string|null;
     preview_file_url: string;
 }
+
+export interface INHentaiGalleryImage {
+    t: "j"|"p"|"g";
+    w: number;
+    h: number;
+}
+
+export interface INHentaiGalleryTag {
+    id: number;
+    type: "language"|"character"|"tag"|"group"|"category"|"artist"|"parody";
+    name: string;
+    url: string;
+    count: number;
+}
+
+export interface INHentaiGallery {
+    id: number;
+    media_id: string;
+    title: {
+        english: string;
+        japanese: string;
+        pretty: string;
+    };
+    images: {
+        pages: INHentaiGalleryImage[];
+        cover: INHentaiGalleryImage;
+        thumbnail: INHentaiGalleryImage;
+    };
+    scanlator: string;
+    upload_date: number;
+    tags: INHentaiGalleryTag[];
+    num_pages: number;
+    num_favorites: number;
+}

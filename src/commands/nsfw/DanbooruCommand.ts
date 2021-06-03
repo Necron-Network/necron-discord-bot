@@ -5,6 +5,7 @@ import { createEmbed } from "../../utils/createEmbed";
 
 @DefineCommand({
     description: "Gives you a random danbooru image",
+    devOnly: true,
     name: "danbooru",
     usage: "{prefix}danbooru [tags]"
 })

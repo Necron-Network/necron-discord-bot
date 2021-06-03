@@ -5,6 +5,7 @@ import { createEmbed } from "../../utils/createEmbed";
 
 @DefineCommand({
     description: "Gives you a random lewd neko image",
+    devOnly: true,
     name: "lewdneko",
     usage: "{prefix}lewdneko"
 })
