@@ -8,7 +8,7 @@ import { MessageReaction, User, Collection } from "discord.js";
 @DefineCommand({
     aliases: [],
     description: "Server stats utility",
-    name: "serverstats"
+    name: "{prefix}serverstats help"
 })
 export class ServerStatsCommand extends BaseCommand {
     public readonly options: Record<string, (message: IMessage, args: string[]) => any> = {
@@ -150,7 +150,7 @@ export class ServerStatsCommand extends BaseCommand {
         }
     };
 
-    public async execute(message: IMessage, args: string[]): Promise<any> {
+    public execute(message: IMessage, args: string[]): any {
         const opt = this.options[args[0]] as ((message: IMessage, args: string[]) => any)|undefined;
         if (!opt) return message.channel.send(createEmbed("error", `Invalid option. Use \`${this.client.config.prefix}serverstats help\` to see list of options.`));
         args.shift();

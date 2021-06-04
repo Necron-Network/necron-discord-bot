@@ -6,7 +6,7 @@ import { createEmbed } from "../../utils/createEmbed";
 @DefineCommand({
     aliases: ["antiinvitelink"],
     description: "Anti invite utility",
-    name: "antiinvite"
+    name: "{prefix}antiinvite"
 })
 export class AntiInviteCommand extends BaseCommand {
     public readonly options: Record<string, (message: IMessage, args: string[]) => any> = {
@@ -75,7 +75,7 @@ export class AntiInviteCommand extends BaseCommand {
         }
     };
 
-    public async execute(message: IMessage, args: string[]): Promise<any> {
+    public execute(message: IMessage, args: string[]): any {
         const opt = this.options[args[0]] as ((message: IMessage, args: string[]) => any)|undefined;
         if (!opt) return message.channel.send("Invalid option");
         args.shift();
