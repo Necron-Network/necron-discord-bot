@@ -8,7 +8,8 @@ import { MessageReaction, User, Collection } from "discord.js";
 @DefineCommand({
     aliases: [],
     description: "Server stats utility",
-    name: "{prefix}serverstats help"
+    name: "serverstats",
+    usage: "{prefix}serverstats help"
 })
 export class ServerStatsCommand extends BaseCommand {
     public readonly options: Record<string, (message: IMessage, args: string[]) => any> = {

@@ -6,7 +6,8 @@ import { createEmbed } from "../../utils/createEmbed";
 @DefineCommand({
     aliases: ["antiinvitelink"],
     description: "Anti invite utility",
-    name: "{prefix}antiinvite"
+    name: "antiinvite",
+    usage: "{prefix}antiinvite"
 })
 export class AntiInviteCommand extends BaseCommand {
     public readonly options: Record<string, (message: IMessage, args: string[]) => any> = {
