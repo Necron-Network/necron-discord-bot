@@ -11,7 +11,7 @@ export class SayCommand extends BaseCommand {
         let channel = (message.mentions.channels.first() ?? await this.client.utils.fetchChannel(args[0]).catch(() => undefined)) as ITextChannel|undefined;
         if (channel) {
             if ([(channel as { toString: () => string }).toString(), channel.id].includes(args[0])) {
-                args.pop();
+                args.shift();
             } else {
                 channel = message.channel as ITextChannel;
             }
