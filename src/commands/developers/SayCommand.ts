@@ -19,9 +19,12 @@ export class SayCommand extends BaseCommand {
             channel = message.channel as ITextChannel;
         }
 
+
         if (channel.id === message.channel.id) message.delete().catch(() => null);
         if (!args.length) return message.channel.send(`${message.author.toString()}, please give me the text you want to send`);
 
-        return channel.send(args.join(" "));
+        return channel.send(args.join(" ")).then(() => {
+            if (channel?.id !== message.channel.id) return message.channel.send(`${message.author.toString()}, sent!`);
+        });
     }
 }
