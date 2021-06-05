@@ -3,6 +3,7 @@ import { IMessage, ITextChannel } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 
 @DefineCommand({
+    devOnly: true,
     name: "say",
     usage: "{prefix}say [channel] <content>"
 })
