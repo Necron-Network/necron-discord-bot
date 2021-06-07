@@ -11,6 +11,7 @@ import { NecronUtils } from "../utils/NecronUtils";
 import { MemberCounterManager } from "../utils/MemberCounterManager";
 import { VoteReminder } from "../utils/VoteReminder";
 import { NecronGuildManager } from "./NecronGuildManager";
+import { WelcomeMessageManager } from "../utils/WelcomeMessageManager";
 import { Db } from "mongodb";
 import Youtube from "youtube-sr";
 
@@ -27,6 +28,7 @@ export class NecronClient extends Client {
     public readonly voteReminder = new VoteReminder(this);
     public readonly youtube = Youtube;
     public readonly guilds = new NecronGuildManager(this);
+    public readonly welcomer = new WelcomeMessageManager(this);
 
     public constructor(opt: ClientOptions) { super(opt); }
 
