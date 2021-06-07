@@ -9,7 +9,7 @@ import { createEmbed } from "../../utils/createEmbed";
 })
 export class SayCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        if (!message.member?.hasPermission("ADMINISTRATOR")) return message.channel.send(createEmbed("error", "You don't have `Administrator` permission to use this command!"));
+        if (!message.member?.hasPermission("ADMINISTRATOR") && !this.client.config.devs.includes(message.author.id)) return message.channel.send(createEmbed("error", "You don't have `Administrator` permission to use this command!"));
 
         let channel = (message.mentions.channels.first() ?? await this.client.utils.fetchChannel(args[0]).catch(() => undefined)) as ITextChannel|undefined;
         if (channel) {
@@ -27,7 +27,7 @@ export class SayCommand extends BaseCommand {
         const attachments = message.attachments.array();
 
         if (channel.id === message.channel.id) message.delete().catch(() => null);
-        if (!args.length) return message.channel.send(message.author.toString(), { embed: createEmbed("error", "Please, give me the text you want to send").toJSON() });
+        if (!args.length && !message.attachments.size) return message.channel.send(message.author.toString(), { embed: createEmbed("error", "Please, give me the text you want to send").toJSON() });
 
         return channel.send(args.join(" "), attachments).then(() => {
             if (channel?.id !== message.channel.id) return message.channel.send(message.author.toString(), { embed: createEmbed("success", "Sent!") });
