@@ -6,13 +6,13 @@ import { MongoClient } from "mongodb";
 export class ReadyEvent extends BaseListener {
     public async execute(): Promise<void> {
         const mongo = new MongoClient(process.env.MONGO_URL!, { useUnifiedTopology: true });
-        await mongo.connect(err => {
+        await mongo.connect(async err => {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (err) this.client.logger.error("MONGODB_CONN_ERR:", err);
             this.client.db = mongo.db(this.client.config.dbName);
             this.client.logger.info("Connected to MongoDB cloud!");
+            await this.client.commands.load();
         });
-        await this.client.commands.load();
         this.client.memberCounter.loadInterval();
         this.client.voteReminder.loadInterval();
         try {
