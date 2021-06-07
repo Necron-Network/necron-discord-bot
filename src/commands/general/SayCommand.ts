@@ -23,10 +23,13 @@ export class SayCommand extends BaseCommand {
         }
 
         if (!channel.permissionsFor(this.client.user!.id)?.toArray(true)?.includes("SEND_MESSAGES")) return message.channel.send(createEmbed("error", `I don't have \`Send Messages\` permission in ${(channel as { toString: () => string }).toString()}`));
+
+        const attachments = message.attachments.array();
+
         if (channel.id === message.channel.id) message.delete().catch(() => null);
         if (!args.length) return message.channel.send(message.author.toString(), { embed: createEmbed("error", "Please, give me the text you want to send").toJSON() });
 
-        return channel.send(args.join(" ")).then(() => {
+        return channel.send(args.join(" "), attachments).then(() => {
             if (channel?.id !== message.channel.id) return message.channel.send(message.author.toString(), { embed: createEmbed("success", "Sent!") });
         });
     }
