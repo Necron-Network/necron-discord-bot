@@ -14,7 +14,7 @@ export class IpCommand extends BaseCommand {
         const serverStatus = await status("necron-network.com").catch(() => undefined);
         if (!serverStatus) return;
 
-        const thumbnail = new MessageAttachment(serverStatus.favicon ?? "", "favicon.png");
+        const thumbnail = new MessageAttachment(Buffer.from(serverStatus.favicon?.replace("data:image/png;base64,", "") ?? "", "base64"), "favicon.png");
 
         return message.channel.send(createEmbed("info").addFields([
             {
