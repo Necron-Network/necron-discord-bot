@@ -19,7 +19,7 @@ export class IpCommand extends BaseCommand {
         return message.channel.send(createEmbed("info").addFields([
             {
                 name: "IP Address",
-                value: `${serverStatus.host}:${serverStatus.port}`,
+                value: `${serverStatus.host}`,
                 inline: true
             },
             {
