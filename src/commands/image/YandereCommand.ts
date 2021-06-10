@@ -24,7 +24,7 @@ export class YandereCommand extends BaseCommand {
 
         if (!post) return message.channel.send(createEmbed("error", "No result."));
 
-        return message.channel.send(createEmbed("success").setTitle(`Danbooru Image (${post.id})`).setURL(`https://yande.re/post/show/${post.id}`)
+        return message.channel.send(createEmbed("success").setTitle(`Yandere Image (${post.id})`).setURL(`https://yande.re/post/show/${post.id}`)
             .setAuthor("Click here if you don't see image", undefined, post.file_url)
             .setImage(post.file_url));
     }
