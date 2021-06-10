@@ -5,7 +5,6 @@ import { createEmbed } from "../../utils/createEmbed";
 
 @DefineCommand({
     description: "Gives you a random danbooru image",
-    devOnly: true,
     name: "danbooru",
     usage: "{prefix}danbooru [tags]"
 })
@@ -30,7 +29,7 @@ export class DanbooruCommand extends BaseCommand {
 
         const extException = ["mp4", "m4a", "zip", "rar"];
         const posts = await this.client.request.get(url.toString()).json<IDanbooruPost[]>();
-        const post = posts.filter(x => (!x.is_deleted && !extException.includes(x.file_ext)))[0] as IDanbooruPost|undefined;
+        const post = posts.filter(x => (!x.is_deleted && !extException.includes(x.file_ext) && ((message.channel as ITextChannel).nsfw ? true : (x.rating === "s"))))[0] as IDanbooruPost|undefined;
 
         if (!post) return message.channel.send(createEmbed("error", "No result."));
 
