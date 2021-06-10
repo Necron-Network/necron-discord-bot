@@ -42,14 +42,14 @@ export function isUserInTheVoiceChannel(): any {
     });
 }
 
-export function isValidVoiceChannel(): any {
+export function isValidVoiceChannel(noSpeakPerm?: boolean): any {
     return inhibit(message => {
         const voiceChannel = message.member?.voice.channel;
         if (voiceChannel?.id === message.guild?.me?.voice.channel?.id) return undefined;
         if (!voiceChannel?.joinable) {
             return message.channel.send(createEmbed("error", "Sorry, but I need **\`CONNECT\`** permission to do this"));
         }
-        if (!voiceChannel.speakable) {
+        if (!voiceChannel.speakable && !noSpeakPerm) {
             voiceChannel.leave();
             return message.channel.send(createEmbed("error", "Sorry, but I need **\`SPEAK\`** permission to do this"));
         }

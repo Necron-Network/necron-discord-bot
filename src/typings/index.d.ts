@@ -1,6 +1,7 @@
 import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, ClientEvents, Guild, VoiceState } from "discord.js";
 import { NecronClient } from "../structures/NecronClient";
 import { ServerQueue } from "../structures/ServerQueue";
+import { ServerVoiceRecorder } from "../structures/ServerVoiceRecorder";
 
 export interface IListener {
     readonly name: keyof ClientEvents;
@@ -100,6 +101,7 @@ export interface IAfk {
 export interface IGuild extends Guild {
     client: NecronClient;
     queue?: ServerQueue;
+    recorder?: ServerVoiceRecorder;
 }
 
 export interface IVoiceState extends VoiceState {
