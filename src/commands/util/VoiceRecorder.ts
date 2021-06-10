@@ -15,7 +15,9 @@ export class VoiceRecorder extends BaseCommand {
     @isSameVoiceChannel()
     @isValidVoiceChannel(true)
     public async execute(message: IMessage): Promise<any> {
-        if (message.guild?.me?.voice.selfDeaf) await message.guild.me.voice.setSelfDeaf(false);
+        return message.channel.send(createEmbed("info", "Coming soon."));
+
+        /* if (message.guild?.me?.voice.selfDeaf) await message.guild.me.voice.setSelfDeaf(false);
         if (message.guild?.me?.voice.deaf) {
             const unDeafen = await message.guild.me.voice.setDeaf(false).catch(() => undefined);
             if (!unDeafen) return message.channel.send(createEmbed("error", "Please, undeafen me!"));
@@ -45,8 +47,8 @@ export class VoiceRecorder extends BaseCommand {
                 message.guild?.recorder?.voiceChannel.leave();
 
                 for (const chunk of message.guild!.recorder!.chunks) {
-                    
+
                 }
-            });
+            });*/
     }
 }

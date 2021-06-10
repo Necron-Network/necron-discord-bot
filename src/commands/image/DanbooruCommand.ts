@@ -10,16 +10,6 @@ import { createEmbed } from "../../utils/createEmbed";
 })
 export class DanbooruCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        if (!(message.channel as ITextChannel).nsfw) {
-            return message.channel.send(createEmbed("error", "You can't use this command outside NSFW channel")).catch(() => undefined).then(m => {
-                if (!m) return;
-
-                setTimeout(() => {
-                    m.delete().catch(() => null);
-                }, 5000);
-            });
-        }
-
         const url = new URL("https://danbooru.donmai.us/posts.json");
         url.searchParams.set("random", "true");
 
