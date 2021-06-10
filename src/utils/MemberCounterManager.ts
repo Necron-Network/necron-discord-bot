@@ -22,7 +22,7 @@ export class MemberCounterManager {
                 const guild = await this.client.utils.fetchGuild(counter.guild);
                 if (!guild) continue;
                 for (const ch of counter.channels) {
-                    if (!(ch as any|undefined)) continue;
+                    if (!(ch as any|undefined)?.id) continue;
                     const channel = await this.client.utils.fetchChannel(ch.id);
                     if (!channel) continue;
                     await (channel as VoiceChannel).setName(this.parseString(ch.format, guild));
