@@ -10,7 +10,7 @@ export class GuildMemberAddEvent extends BaseListener {
         if (!this.client.db) return;
 
         const data = await this.client.db.collection<IWelcomeMessage>("welcomemessage").findOne({ guild: member.guild.id });
-        if (!data) return;
+        if (!data?.enabled) return;
 
         return this.client.welcomer.sendData(data, member, false);
     }
