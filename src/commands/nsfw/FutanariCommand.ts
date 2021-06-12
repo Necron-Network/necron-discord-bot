@@ -4,11 +4,11 @@ import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
 
 @DefineCommand({
-    description: "Gives you a random lewd neko image",
-    name: "lewdneko",
-    usage: "{prefix}lewdneko"
+    description: "Gives you a random futanari image",
+    name: "futanari",
+    usage: "{prefix}futanari"
 })
-export class LewdNekoCommand extends BaseCommand {
+export class FutanariCommand extends BaseCommand {
     public async execute(message: IMessage): Promise<any> {
         if (!(message.channel as ITextChannel).nsfw) {
             return message.channel.send(createEmbed("error", "You can't use this command outside NSFW channel")).catch(() => undefined).then(m => {
@@ -20,9 +20,9 @@ export class LewdNekoCommand extends BaseCommand {
             });
         }
 
-        const { url } = await this.client.request.get("https://nekos.life/api/v2/img/lewd").json<INekosLifeImgResponse>();
+        const { url } = await this.client.request.get("https://nekos.life/api/v2/img/futanari").json<INekosLifeImgResponse>();
 
-        return message.channel.send(createEmbed("success").setTitle("Lewd Neko Image").setURL(url)
+        return message.channel.send(createEmbed("success").setTitle("Futanari Image").setURL(url)
             .setImage(url)
             .setAuthor("Click here if you don't see image", undefined, url));
     }
