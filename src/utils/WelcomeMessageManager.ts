@@ -69,6 +69,7 @@ export class WelcomeMessageManager {
 
     public parseString(str: string, member: GuildMember): string {
         return str.replace(/{guild.member.count}/g, member.guild.members.cache.size.toString())
+            .replace(/{guild.name}/g, member.guild.name)
             .replace(/{member.username}/g, member.user.username)
             .replace(/{member.tag}/g, member.user.tag)
             .replace(/{member.mention}/g, member.user.toString())
