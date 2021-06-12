@@ -60,7 +60,7 @@ export class WelcomeMessageManager {
             embed = new MessageEmbed(embedData);
         }
 
-        if (embed && data.props.embed?.enabled) {
+        if (embed && (embedOnly ? true : data.props.embed?.enabled)) {
             await ch.send(embedOnly ? "" : this.parseString(data.props.content, member), { embed });
         } else {
             await ch.send(this.parseString(data.props.content, member));
