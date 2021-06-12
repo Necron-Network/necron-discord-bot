@@ -2,20 +2,24 @@ import { NecronClient } from "../structures/NecronClient";
 import { ITextChannel } from "../typings";
 import { MessageEmbedOptions, GuildMember, MessageEmbed } from "discord.js";
 
+export interface IEmbedOptions extends MessageEmbedOptions {
+    enabled?: boolean;
+}
+
 export interface IWelcomeMessage {
     guild: string;
     enabled: boolean;
     channel: string;
     props: {
         content: string;
-        embed?: MessageEmbedOptions;
+        embed?: IEmbedOptions;
     };
 }
 
 export class WelcomeMessageManager {
     public constructor(public readonly client: NecronClient) {}
 
-    public async sendData(data: IWelcomeMessage, member: GuildMember): Promise<void> {
+    public async sendData(data: IWelcomeMessage, member: GuildMember, embedOnly: boolean): Promise<void> {
         const ch = (await this.client.utils.fetchChannel(data.channel)) as ITextChannel|undefined;
         if (!ch) return;
 
@@ -56,8 +60,8 @@ export class WelcomeMessageManager {
             embed = new MessageEmbed(embedData);
         }
 
-        if (embed) {
-            await ch.send(this.parseString(data.props.content, member), { embed });
+        if (embed && data.props.embed?.enabled) {
+            await ch.send(embedOnly ? "" : this.parseString(data.props.content, member), { embed });
         } else {
             await ch.send(this.parseString(data.props.content, member));
         }

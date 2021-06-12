@@ -12,6 +12,122 @@ import { MessageReaction, User } from "discord.js";
     usage: "{prefix}welcomemessage help"
 })
 export class WelcomeMessageCommand extends BaseCommand {
+    public readonly embedOptions: Record<string, ((message: IMessage, args: string[]) => any)|undefined> = {
+        "author.icon": async (message: IMessage, args: string[]) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+            if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the new embed author icon (Use \`${this.client.config.prefix}welcomemessage embed author.icon disable\` to disable author icon).`));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed) data.props.embed = {};
+
+            data.props.embed.author = data.props.embed.author ?? {};
+            data.props.embed.author.icon_url = args[0] === "disable" ? undefined : args.join(" ");
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", `Embed author icon successfully changed. Use \`${this.client.config.prefix}welcomemessage embed preview\` to see preview`));
+        },
+        "author.text": async (message: IMessage, args: string[]) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+            if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the new embed author text (Use \`${this.client.config.prefix}welcomemessage embed author.text disable\` to disable author text).`));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed) data.props.embed = {};
+
+            data.props.embed.author = data.props.embed.author ?? {};
+            data.props.embed.author.name = args[0] === "disable" ? undefined : args.join(" ");
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", `Embed author text successfully changed. Use \`${this.client.config.prefix}welcomemessage embed preview\` to see preview`));
+        },
+        description: async (message: IMessage, args: string[]) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+            if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the new embed description (Use \`${this.client.config.prefix}welcomemessage embed description disable\` to disable description).`));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed) data.props.embed = {};
+
+            data.props.embed.description = args[0] === "disable" ? undefined : args.join(" ");
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", `Embed description successfully changed. Use \`${this.client.config.prefix}welcomemessage embed preview\` to see preview`));
+        },
+        disable: async (message: IMessage) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed?.enabled) return message.channel.send(createEmbed("error", "Welcome message embed already disabled"));
+
+            data.props.embed.enabled = false;
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", "Welcome message embed disabled!"));
+        },
+        enable: async (message: IMessage) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (data.props.embed?.enabled) return message.channel.send(createEmbed("error", "Welcome message embed already enabled"));
+            if (!data.props.embed) {
+                data.props.embed = {
+                    description: "Welcome to {guild.name}, {user.username}."
+                };
+            }
+
+            data.props.embed.enabled = true;
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", "Welcome message embed enabled!"));
+        },
+        "footer.icon": async (message: IMessage, args: string[]) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+            if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the new embed footer icon (Use \`${this.client.config.prefix}welcomemessage embed footer.icon disable\` to disable footer icon).`));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed) data.props.embed = {};
+
+            data.props.embed.footer = data.props.embed.footer ?? {};
+            data.props.embed.footer.icon_url = args[0] === "disable" ? undefined : args.join(" ");
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", `Embed footer icon successfully changed. Use \`${this.client.config.prefix}welcomemessage embed preview\` to see preview`));
+        },
+        "footer.text": async (message: IMessage, args: string[]) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+            if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the new embed footer text (Use \`${this.client.config.prefix}welcomemessage embed footer.text disable\` to disable footer text).`));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed) data.props.embed = {};
+
+            data.props.embed.footer = data.props.embed.footer ?? {};
+            data.props.embed.footer.text = args[0] === "disable" ? undefined : args.join(" ");
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", `Embed footer text successfully changed. Use \`${this.client.config.prefix}welcomemessage embed preview\` to see preview`));
+        },
+        preview: async (message: IMessage) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed) return message.channel.send(createEmbed("error", "Welcome message embed of this server couldn't be found"));
+
+            data.channel = message.channel.id;
+            return this.client.welcomer.sendData(data, message.member!, true);
+        },
+        title: async (message: IMessage, args: string[]) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+            if (!args.length) return message.channel.send(createEmbed("error", `Please, give me the new embed title (Use \`${this.client.config.prefix}welcomemessage embed title disable\` to disable title).`));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+            if (!data.props.embed) data.props.embed = {};
+
+            data.props.embed.title = args[0] === "disable" ? undefined : args.join(" ");
+            await this.collection.updateOne({ guild: message.guild!.id }, { $set: data }, { upsert: true });
+            return message.channel.send(createEmbed("success", `Embed title successfully changed. Use \`${this.client.config.prefix}welcomemessage embed preview\` to see preview`));
+        }
+    };
+
     public readonly options: Record<string, (message: IMessage, args: string[]) => any> = {
         disable: async (message: IMessage) => {
             if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
@@ -27,6 +143,53 @@ export class WelcomeMessageCommand extends BaseCommand {
             }
 
             return message.channel.send(createEmbed("success", desc));
+        },
+        embed: async (message: IMessage, args: string[]) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+
+            const option = this.embedOptions[args[0]];
+            if (!option) {
+                return message.channel.send(createEmbed("info").setTitle("Welcome message utility: embed option list").addFields([
+                    {
+                        name: "description <text (with placeholder(s))>",
+                        value: "Set the embed description",
+                        inline: false
+                    },
+                    {
+                        name: "title <text (with placeholder(s))>",
+                        value: "Set the embed title",
+                        inline: false
+                    },
+                    {
+                        name: "author.text <text (with placeholder(s))>",
+                        value: "Set the embed author text",
+                        inline: false
+                    },
+                    {
+                        name: "author.icon <url (with placeholder(s))>",
+                        value: "Set the embed author icon URL",
+                        inline: false
+                    },
+                    {
+                        name: "footer.text <text (with placeholder(s))>",
+                        value: "Set the embed footer text",
+                        inline: false
+                    },
+                    {
+                        name: "footer.icon <url (with placeholder(s))>",
+                        value: "Set the embed footer icon URL",
+                        inline: false
+                    },
+                    {
+                        name: "preview",
+                        value: "Show the preview of the embed",
+                        inline: false
+                    }
+                ]));
+            }
+
+            args.shift();
+            return option(message, args);
         },
         enable: async (message: IMessage) => {
             if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
@@ -56,7 +219,7 @@ export class WelcomeMessageCommand extends BaseCommand {
 
             return message.channel.send(createEmbed("success", `${desc}. Use \`${this.client.config.prefix}welcomemessage message\` to see or set the welcome message.`));
         },
-        help: (message: IMessage) => message.channel.send(createEmbed("info", "Option list").setTitle("Welcome message utility").addFields([
+        help: (message: IMessage) => message.channel.send(createEmbed("info").setTitle("Welcome message utility: option list").addFields([
             {
                 name: "set <channel>",
                 value: "Set welcome message channel.",
@@ -88,11 +251,12 @@ export class WelcomeMessageCommand extends BaseCommand {
                 inline: false
             },
             {
-                name: "???",
-                value: "More option coming soon!",
+                name: "preview",
+                value: "Show welcome message preview",
                 inline: false
             }
-        ])),
+        ])
+            .setDescription(`${this.client.config.prefix}welcomemessage <option>`)),
         message: async (message: IMessage, args: string[]) => {
             if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
 
@@ -129,6 +293,15 @@ export class WelcomeMessageCommand extends BaseCommand {
             } else {
                 await message.channel.send(createEmbed("info", this.client.welcomer.parseString(data.props.content, message.member!)).setAuthor("Welcome message preview", message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true })));
             }
+        },
+        preview: async (message: IMessage) => {
+            if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+
+            const data = await this.collection.findOne({ guild: message.guild!.id });
+            if (!data) return message.channel.send(createEmbed("error", "Welcome message data of this server couldn't be found"));
+
+            data.channel = message.channel.id;
+            return this.client.welcomer.sendData(data, message.member!, false);
         },
         set: async (message: IMessage, args: string[]) => {
             if (!this.collection) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
