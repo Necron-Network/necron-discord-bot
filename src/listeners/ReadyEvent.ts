@@ -12,6 +12,7 @@ export class ReadyEvent extends BaseListener {
             this.client.db = mongo.db(this.client.config.dbName);
             this.client.logger.info("Connected to MongoDB cloud!");
             await this.client.commands.load();
+            this.client.infraction.loadCollection();
         });
         this.client.memberCounter.loadInterval();
         this.client.voteReminder.loadInterval();

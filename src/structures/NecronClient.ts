@@ -12,6 +12,7 @@ import { MemberCounterManager } from "../utils/MemberCounterManager";
 import { VoteReminder } from "../utils/VoteReminder";
 import { NecronGuildManager } from "./NecronGuildManager";
 import { WelcomeMessageManager } from "../utils/WelcomeMessageManager";
+import { InfractionManager } from "../utils/InfractionManager";
 import { Db } from "mongodb";
 import Youtube from "youtube-sr";
 
@@ -29,6 +30,7 @@ export class NecronClient extends Client {
     public readonly youtube = Youtube;
     public readonly guilds = new NecronGuildManager(this);
     public readonly welcomer = new WelcomeMessageManager(this);
+    public readonly infraction = new InfractionManager(this);
 
     public constructor(opt: ClientOptions) { super(opt); }
 
