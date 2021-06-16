@@ -16,4 +16,14 @@ export class NecronUtils {
     public async fetchUser(id: string): Promise<User|undefined> {
         return this.client.users.cache.get(id) ?? this.client.users.fetch(id).catch(() => undefined);
     }
+
+    public toOrdinal(num: number): string {
+        const ends: Record<string, string> = {
+            1: "st",
+            2: "nd",
+            3: "rd"
+        };
+
+        return `${num}${ends[String(num).slice(-1)] as string|undefined ?? "th"}`;
+    }
 }
