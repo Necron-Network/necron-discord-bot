@@ -23,7 +23,7 @@ export class CreateActivityCommand extends BaseCommand {
         const targetApplicationID = applicationIds[args[0]];
         if (!targetApplicationID) return message.channel.send(createEmbed("error", `Invalid activity type. Valid activity types are: ${Object.keys(applicationIds).map(x => `\`${x}\``).join(", ")}`));
 
-        const inviteData = await this.client.request.post(`https://discord.com/api/v8/channels/${message.member.voice.channel.id}`, {
+        const inviteData = await this.client.request.post(`https://discord.com/api/v8/channels/${message.member.voice.channel.id}/invites`, {
             headers: {
                 authorization: `Bot ${this.client.token!}`,
                 "content-type": "application/json"
