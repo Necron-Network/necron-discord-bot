@@ -30,7 +30,7 @@
     "tslib": "^2.3.0",
     "winston": "^3.3.3",
     "youtube-sr": "^4.1.4",
-    "ytdl-core": "^4.8.2"
+    "ytdl-core": "^4.8.3"
   },
   "eslintConfig": {
     "extends": "@hazmi35/eslint-config/typescript",
