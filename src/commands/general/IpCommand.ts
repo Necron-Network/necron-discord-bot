@@ -31,6 +31,11 @@ export class IpCommand extends BaseCommand {
                 name: "MOTD",
                 value: `${serverStatus.description?.toString() ?? "No Information"}`,
                 inline: false
+            },
+            {
+                name: "Version"
+                value: serverStatus.version,
+                inline: false
             }
         ]).attachFiles([thumbnail])
             .setThumbnail("attachment://favicon.png"));
