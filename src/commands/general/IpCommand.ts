@@ -33,7 +33,7 @@ export class IpCommand extends BaseCommand {
                 inline: false
             },
             {
-                name: "Version"
+                name: "Version",
                 value: serverStatus.version,
                 inline: false
             }
