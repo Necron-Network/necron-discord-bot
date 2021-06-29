@@ -251,3 +251,10 @@ export interface IYanderePost {
     last_noted_at: number;
     last_commented_at: number;
 }
+
+export interface IGhostPingReminder {
+    guild: string;
+    enabled: boolean;
+    whitelistedChannels: string[];
+    whitelistedUsers: string[];
+}
