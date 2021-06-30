@@ -28,7 +28,7 @@
     "semver": "^7.3.5",
     "tslib": "^2.3.0",
     "winston": "^3.3.3",
-    "youtube-sr": "^4.1.4",
+    "youtube-sr": "^4.1.6",
     "ytdl-core": "^4.8.3"
   },
   "eslintConfig": {
