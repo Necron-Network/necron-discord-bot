@@ -40,6 +40,7 @@ export class DocsCommand extends BaseCommand {
                 if (typedefs.length) embed.addField("Typedefs", typedefs.map(x => x.split(" ").slice(1).join(" ")).join("\n"), true);
 
                 embed.description = "";
+                embed.title = "Search results";
             }
             return message.channel.send({ embed });
         } catch (err) {
