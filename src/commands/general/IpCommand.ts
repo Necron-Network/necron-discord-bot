@@ -11,7 +11,7 @@ import { status } from "minecraft-server-util";
 })
 export class IpCommand extends BaseCommand {
     public async execute(message: IMessage): Promise<any> {
-        const serverStatus = await status("necron-network.com").catch(() => undefined);
+        const serverStatus = await status("necron-network.xyz").catch(() => undefined);
         if (!serverStatus) return;
 
         const thumbnail = new MessageAttachment(Buffer.from(serverStatus.favicon?.replace("data:image/png;base64,", "") ?? "", "base64"), "favicon.png");
