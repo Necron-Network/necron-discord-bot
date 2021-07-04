@@ -19,7 +19,7 @@ export class MemberCounterManager {
             if (!this.client.db) return this.client.logger.error("MEMBERCOUNTER_INTERVAL_ERR: Database unavailable");
             const counters = await this.client.db.collection<IMemberCounter>("membercounter").find().toArray();
             for (const counter of counters.filter(x => this.client.guilds.cache.has(x.guild))) {
-                const guild = await this.client.utils.fetchGuild(counter.guild);
+                const guild = await this.client.utils.fetchGuild(counter.guild, true) ?? await this.client.utils.fetchGuild(counter.guild);
                 if (!guild) continue;
                 for (const ch of counter.channels) {
                     if (!(ch as any|undefined)?.id) continue;
