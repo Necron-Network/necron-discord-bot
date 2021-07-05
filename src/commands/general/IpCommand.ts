@@ -29,7 +29,7 @@ export class IpCommand extends BaseCommand {
             },
             {
                 name: "MOTD",
-                value: `${serverStatus.description?.toString() ?? "No Information"}`,
+                value: `${serverStatus.description?.toRaw() ?? "No Information"}`,
                 inline: false
             },
             {
