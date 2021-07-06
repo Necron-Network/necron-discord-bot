@@ -34,16 +34,6 @@ export class MuteCommand extends BaseCommand {
 
             if (!newRole) return message.channel.send(createEmbed("error", "Unable to create mute role"));
 
-            for (const channel of message.guild.channels.cache.array()) {
-                await channel.createOverwrite(newRole.id, {
-                    SEND_MESSAGES: false,
-                    SEND_TTS_MESSAGES: false,
-                    ADD_REACTIONS: false
-                }).catch(() => undefined);
-
-                await this.client.utils.delay(1000);
-            }
-
             const newData: IMuteRole = {
                 guildID: message.guild.id,
                 roleID: newRole.id
@@ -55,6 +45,14 @@ export class MuteCommand extends BaseCommand {
         const result = await member.roles.add(role.id).catch(() => undefined);
         if (!result) return message.channel.send(createEmbed("error", "Unable to mute that member"));
 
-        return message.channel.send(createEmbed("success", "Successfully muted").setAuthor(member.user.tag, member.user.displayAvatarURL({ format: "png", size: 2048, dynamic: true })));
+        await message.channel.send(createEmbed("success", "Successfully muted").setAuthor(member.user.tag, member.user.displayAvatarURL({ format: "png", size: 2048, dynamic: true })));
+
+        for (const channel of message.guild.channels.cache.array()) {
+            await channel.createOverwrite(role.id, {
+                SEND_MESSAGES: false,
+                SEND_TTS_MESSAGES: false,
+                ADD_REACTIONS: false
+            }).catch(() => undefined);
+        }
     }
 }
