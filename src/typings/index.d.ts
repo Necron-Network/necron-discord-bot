@@ -276,3 +276,8 @@ export interface IGhostPingReminder {
     whitelistedChannels: string[];
     whitelistedUsers: string[];
 }
+
+export interface IMuteRole {
+    guildID: string;
+    roleID: string;
+}
