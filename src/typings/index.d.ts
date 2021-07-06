@@ -2,6 +2,24 @@ import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, Cl
 import { NecronClient } from "../structures/NecronClient";
 import { ServerQueue } from "../structures/ServerQueue";
 import { ServerVoiceRecorder } from "../structures/ServerVoiceRecorder";
+import { Request, Response, NextFunction, Router } from "express";
+
+export interface IRoutesComponent {
+    meta: {
+        customCallback?: ((request: Request, response: Response, next: NextFunction) => any)[];
+        method: "get" | "post" | "put" | "patch" | "delete";
+        name: string;
+        path: string;
+        router?: string;
+    };
+    execute(request: Request, response: Response): any;
+}
+
+export interface IRouterComponent {
+    path: string;
+    routes: string[];
+    instance: Router;
+}
 
 export interface IListener {
     readonly name: keyof ClientEvents;

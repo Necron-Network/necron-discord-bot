@@ -32,3 +32,4 @@ export const presenceData = {
 };
 export const shardsCount: number | "auto" = "auto";
 export const dbName = "NecronDatabase";
+export const port = 4785;
