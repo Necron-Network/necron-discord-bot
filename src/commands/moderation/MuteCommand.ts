@@ -20,6 +20,8 @@ export class MuteCommand extends BaseCommand {
         const roleData = await collection?.findOne({ guildID: message.guild.id });
         let role = message.guild.roles.cache.get(roleData?.roleID as string);
         if (!role) {
+            if (!message.guild.me.hasPermission("MANAGE_CHANNELS")) return message.channel.send(createEmbed("error", "I don't have `Manage Channels` permission to set role permission on channels!"));
+
             const newRole = await message.guild.roles.create({
                 data: {
                     mentionable: false,
