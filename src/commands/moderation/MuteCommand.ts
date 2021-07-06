@@ -32,6 +32,16 @@ export class MuteCommand extends BaseCommand {
 
             if (!newRole) return message.channel.send(createEmbed("error", "Unable to create mute role"));
 
+            for (const channel of message.guild.channels.cache.array()) {
+                await channel.createOverwrite(newRole.id, {
+                    SEND_MESSAGES: false,
+                    SEND_TTS_MESSAGES: false,
+                    ADD_REACTIONS: false
+                }).catch(() => undefined);
+
+                await this.client.utils.delay(1000);
+            }
+
             const newData: IMuteRole = {
                 guildID: message.guild.id,
                 roleID: newRole.id
