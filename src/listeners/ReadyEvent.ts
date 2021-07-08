@@ -11,12 +11,12 @@ export class ReadyEvent extends BaseListener {
             if (err) this.client.logger.error("MONGODB_CONN_ERR:", err);
             this.client.db = mongo.db(this.client.config.dbName);
             this.client.logger.info("Connected to MongoDB cloud!");
+            this.client.logs.load();
             await this.client.commands.load();
             this.client.infraction.loadCollection();
         });
         this.client.memberCounter.loadInterval();
         this.client.voteReminder.loadInterval();
-        this.client.logs.load();
         try {
             this.client.user?.setActivity(`${this.client.config.prefix}help`, { type: "PLAYING" });
         } catch (err) {
