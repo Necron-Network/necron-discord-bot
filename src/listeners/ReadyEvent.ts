@@ -16,6 +16,7 @@ export class ReadyEvent extends BaseListener {
         });
         this.client.memberCounter.loadInterval();
         this.client.voteReminder.loadInterval();
+        this.client.logs.load();
         try {
             this.client.user?.setActivity(`${this.client.config.prefix}help`, { type: "PLAYING" });
         } catch (err) {
