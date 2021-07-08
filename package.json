@@ -24,13 +24,13 @@
     "ffmpeg-static": "^4.4.0",
     "got": "^11.8.2",
     "minecraft-server-util": "^3.5.2",
-    "mongodb": "^3.6.9",
+    "mongodb": "^3.6.10",
     "morgan": "^1.10.0",
     "pretty-ms": "^7.0.1",
     "semver": "^7.3.5",
     "tslib": "^2.3.0",
     "winston": "^3.3.3",
-    "youtube-sr": "^4.1.6",
+    "youtube-sr": "^4.1.7",
     "ytdl-core": "^4.8.3"
   },
   "eslintConfig": {
@@ -41,17 +41,17 @@
   },
   "devDependencies": {
     "@hazmi35/eslint-config": "^4.0.0",
-    "@types/express": "^4.17.12",
-    "@types/mongodb": "^3.6.18",
+    "@types/express": "^4.17.13",
+    "@types/mongodb": "^3.6.19",
     "@types/morgan": "^1.9.2",
-    "@types/node": "^15.12.5",
-    "@types/semver": "^7.3.6",
-    "@typescript-eslint/eslint-plugin": "^4.28.1",
-    "@typescript-eslint/parser": "^4.28.1",
+    "@types/node": "^16.0.0",
+    "@types/semver": "^7.3.7",
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
     "dotenv": "^10.0.0",
-    "eslint": "^7.29.0",
+    "eslint": "^7.30.0",
     "ts-node": "^10.0.0",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   },
   "optionalDependencies": {
     "@discordjs/opus": "^0.5.3",
