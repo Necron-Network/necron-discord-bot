@@ -5,9 +5,13 @@ import { DMChannel, GuildChannel } from "discord.js";
 
 @DefineListener("channelDelete")
 export class ChannelDeleteEvent extends BaseListener {
-    public async execute(channel: DMChannel|GuildChannel): Promise<any> {
+    public execute(channel: DMChannel|GuildChannel): void {
         if (!("guild" in channel)) return;
 
+        void this.memberCounterHandler(channel);
+    }
+
+    private async memberCounterHandler(channel: GuildChannel): Promise<any> {
         const collection = this.client.db!.collection<IMemberCounter>("membercounter");
         const data = await collection.findOne({ guild: channel.guild.id });
 
