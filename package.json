@@ -18,7 +18,7 @@
   "dependencies": {
     "date-fns": "^2.22.1",
     "discord-ytdl-core": "^5.0.4",
-    "discord.js": "^12.5.3",
+    "discord.js": "github:discordjs/discord.js",
     "entities": "^2.2.0",
     "express": "^4.17.1",
     "ffmpeg-static": "^4.4.0",
@@ -44,7 +44,7 @@
     "@types/express": "^4.17.13",
     "@types/mongodb": "^3.6.19",
     "@types/morgan": "^1.9.2",
-    "@types/node": "^16.0.0",
+    "@types/node": "^16.3.0",
     "@types/semver": "^7.3.7",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
