@@ -43,7 +43,7 @@
     "@hazmi35/eslint-config": "^4.0.0",
     "@types/express": "^4.17.13",
     "@types/mongodb": "^3.6.19",
-    "@types/morgan": "^1.9.2",
+    "@types/morgan": "^1.9.3",
     "@types/node": "^16.3.0",
     "@types/semver": "^7.3.7",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
