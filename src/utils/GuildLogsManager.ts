@@ -43,7 +43,7 @@ export class GuildLogsManager {
                 break;
             case "message-delete":
                 await channel.send({
-                    embeds: [createEmbed("info", props.content).setTitle(`Message in #${channel.name} deleted`).setAuthor(props.author.tag, props.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))
+                    embeds: [createEmbed("info", props.content).setTitle(`Message in #${(props.channel as ITextChannel).name} deleted`).setAuthor(props.author.tag, props.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))
                         .setFooter(props.embeds.length ? "Message embed below" : "")]
                 });
 
