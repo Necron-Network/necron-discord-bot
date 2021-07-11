@@ -11,7 +11,7 @@ export class NecronUtils {
             const fetchData = (await this.client.shard?.broadcastEval(c => c.guilds.cache.get(id as Snowflake))) as (IGuild|undefined)[]|undefined;
             data = fetchData?.find(g => g?.id === id);
         } else {
-            data = this.client.guilds.cache.get(id as Snowflake) ?? this.client.guilds.fetch(id as Snowflake).catch(() => undefined);
+            data = (this.client.guilds.cache.get(id as Snowflake) ?? await this.client.guilds.fetch(id as Snowflake).catch(() => undefined)) as IGuild|undefined;
         }
 
         return data;
