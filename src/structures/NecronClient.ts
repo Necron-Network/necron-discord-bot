@@ -10,7 +10,6 @@ import { ListenerLoader } from "../utils/ListenerLoader";
 import { NecronUtils } from "../utils/NecronUtils";
 import { MemberCounterManager } from "../utils/MemberCounterManager";
 import { VoteReminder } from "../utils/VoteReminder";
-import { NecronGuildManager } from "./NecronGuildManager";
 import { WelcomeMessageManager } from "../utils/WelcomeMessageManager";
 import { InfractionManager } from "../utils/InfractionManager";
 import { GuildLogsManager } from "../utils/GuildLogsManager";
@@ -29,7 +28,6 @@ export class NecronClient extends Client {
     public readonly memberCounter = new MemberCounterManager(this);
     public readonly voteReminder = new VoteReminder(this);
     public readonly youtube = Youtube;
-    public readonly guilds = new NecronGuildManager(this);
     public readonly welcomer = new WelcomeMessageManager(this);
     public readonly infraction = new InfractionManager(this);
     public readonly logs = new GuildLogsManager(this);
