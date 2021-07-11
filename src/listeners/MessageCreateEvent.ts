@@ -4,8 +4,8 @@ import { DefineListener } from "../utils/decorators/DefineListener";
 import { BaseListener } from "../structures/BaseListener";
 import { createEmbed } from "../utils/createEmbed";
 
-@DefineListener("message")
-export class MessageEvent extends BaseListener {
+@DefineListener("messageCreate")
+export class MessageCreateEvent extends BaseListener {
     public async execute(message: IMessage): Promise<any> {
         if (message.author.bot || message.channel.type === "DM") return message;
 
