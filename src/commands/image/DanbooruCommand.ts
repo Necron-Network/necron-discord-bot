@@ -80,6 +80,7 @@ export class DanbooruCommand extends BaseCommand {
                     embeds: [embed],
                     components: [[stopButton, nextButton]]
                 });
+                seenPost.push(nextPost.id);
             } else {
                 await msg.delete();
             }
