@@ -1,6 +1,6 @@
 import { NecronClient } from "../structures/NecronClient";
 import { ITextChannel } from "../typings";
-import { Collection } from "discord.js";
+import { Collection, Snowflake } from "discord.js";
 import { createEmbed } from "./createEmbed";
 
 export interface IGiveawayRoleRequirement {
@@ -58,7 +58,7 @@ export class GiveawayManager {
         if (!this.collection) throw Error("Couldn't contact database");
 
         const giveaways = await this.collection.find().toArray();
-        for (const giveaway of giveaways.filter(g => this.client.guilds.cache.has(g.guildID))) {
+        for (const giveaway of giveaways.filter(g => this.client.guilds.cache.has(g.guildID as Snowflake))) {
             this.cache.set(giveaway.giveawayID, giveaway);
             this.loadInterval(giveaway.giveawayID);
         }
@@ -92,8 +92,8 @@ export class GiveawayManager {
         if (!data) return;
 
         const guild = await this.client.utils.fetchGuild(data.guildID, true);
-        const channel = (this.client.channels.cache.get(data.channelID) ?? await this.client.utils.fetchChannel(data.channelID)) as ITextChannel|undefined;
-        const message = await channel?.messages.fetch(data.messageID).catch(() => undefined);
+        const channel = (this.client.channels.cache.get(data.channelID as Snowflake) ?? await this.client.utils.fetchChannel(data.channelID)) as ITextChannel|undefined;
+        const message = await channel?.messages.fetch(data.messageID as Snowflake).catch(() => undefined);
         if (!message) return;
 
         const users = message.reactions.cache.get("🎉")?.users.cache.filter(x => x.id !== this.client.user!.id);
@@ -110,7 +110,7 @@ export class GiveawayManager {
 
                         if (!entryGuild) continue;
                         if (!entryGuildMember || entryGuildMember.deleted) continue;
-                        if (entryReq.type === "role" && !entryGuildMember.roles.cache.has(entryReq.roleID)) continue;
+                        if (entryReq.type === "role" && !entryGuildMember.roles.cache.has(entryReq.roleID as Snowflake)) continue;
 
                         for (let n = 0; n < entryReq.entries; n++) {
                             entries.push(user.id);
@@ -121,7 +121,7 @@ export class GiveawayManager {
 
             // The rest will be added later
         } else {
-            channel?.send(createEmbed("error"));
+            channel?.send({ embeds: [createEmbed("error")] });
         }
     }
 }

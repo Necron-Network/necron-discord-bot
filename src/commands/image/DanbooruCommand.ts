@@ -21,12 +21,14 @@ export class DanbooruCommand extends BaseCommand {
         const posts = await this.client.request.get(url.toString()).json<IDanbooruPost[]>();
         const post = posts.filter(x => (!x.is_deleted && !extException.includes(x.file_ext) && ((message.channel as ITextChannel).nsfw ? true : (x.rating === "s"))))[0] as IDanbooruPost|undefined;
 
-        if (!post) return message.channel.send(createEmbed("error", "No result."));
+        if (!post) return message.channel.send({ embeds: [createEmbed("error", "No result.")] });
 
         const imgUrl = ((post.large_file_url === "" || post.large_file_url === null) ? undefined : post.large_file_url) ?? post.file_url;
 
-        return message.channel.send(createEmbed("success").setTitle(`Danbooru Image (${post.id})`).setURL(`https://danbooru.donmai.us/posts/${post.id}`)
-            .setAuthor("Click here if you don't see image", undefined, imgUrl)
-            .setImage(imgUrl));
+        return message.channel.send({
+            embeds: [createEmbed("success").setTitle(`Danbooru Image (${post.id})`).setURL(`https://danbooru.donmai.us/posts/${post.id}`)
+                .setAuthor("Click here if you don't see image", undefined, imgUrl)
+                .setImage(imgUrl)]
+        });
     }
 }

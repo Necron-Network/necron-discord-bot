@@ -7,7 +7,7 @@ import { User, Role } from "discord.js";
 @DefineListener("messageDelete")
 export class MessageDeleteEvent extends BaseListener {
     public async execute(message: IMessage): Promise<any> {
-        if (message.partial as boolean || message.channel.type !== "text") return;
+        if (message.partial as boolean || message.channel.type !== "GUILD_TEXT") return;
 
         void this.client.logs.send(message.guild!.id, "message-delete", message).catch(() => null);
 
@@ -22,7 +22,9 @@ export class MessageDeleteEvent extends BaseListener {
 
         void this.client.logs.send(message.guild!.id, "ghost-ping", message).catch(() => null);
 
-        return message.channel.send(createEmbed("info", message.content).setAuthor(message.author.tag, message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true })).setTitle("Ghost Ping Reminder")
-            .addField("Mentions", mentions.map(x => x.toString()).join(" ")));
+        return message.channel.send({
+            embeds: [createEmbed("info", message.content).setAuthor(message.author.tag, message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true })).setTitle("Ghost Ping Reminder")
+                .addField("Mentions", mentions.map(x => x.toString()).join(" "))]
+        });
     }
 }

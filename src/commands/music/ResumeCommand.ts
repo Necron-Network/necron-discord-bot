@@ -15,16 +15,18 @@ export class ResumeCommand extends BaseCommand {
     @isMusicPlaying()
     @isSameVoiceChannel()
     public execute(message: IMessage): any {
-        if (message.guild?.queue?.playing) return message.channel.send(createEmbed("error", "The music player is not paused")).catch(() => null);
+        return message.channel.send({ embeds: [createEmbed("error", "Work in Progress")] });
+
+        if (message.guild?.queue?.playing) return message.channel.send({ embeds: [createEmbed("error", "The music player is not paused")] }).catch(() => null);
 
         message.guild!.queue!.playing = true;
-        message.guild?.queue?.connection?.dispatcher.resume();
+        // message.guild?.queue?.connection?.dispatcher.resume();
         // This will be reverted
         if (satisfies(process.version, ">=14.17.0")) {
-            message.guild?.queue?.connection?.dispatcher.pause();
-            message.guild?.queue?.connection?.dispatcher.resume();
+            // message.guild?.queue?.connection?.dispatcher.pause();
+            // message.guild?.queue?.connection?.dispatcher.resume();
         }
 
-        return message.channel.send(createEmbed("info", "The music player has been resumed")).catch(() => null);
+        return message.channel.send({ embeds: [createEmbed("info", "The music player has been resumed")] }).catch(() => null);
     }
 }

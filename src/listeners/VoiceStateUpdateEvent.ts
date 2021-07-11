@@ -9,7 +9,7 @@ import { formatMS } from "../utils/formatMS";
 @DefineListener("voiceStateUpdate")
 export class VoiceStateUpdateEvent extends BaseListener {
     public execute(oldState: IVoiceState, newState: IVoiceState): any {
-        const queue = newState.guild.queue;
+        /* const queue = newState.guild.queue;
 
         if (!queue) return;
 
@@ -52,11 +52,11 @@ export class VoiceStateUpdateEvent extends BaseListener {
         if (oldID === queueVC.id && newID !== queueVC.id && !member?.user.bot && !queue.timeout) this.doTimeout(queueVCMembers, queue, newState);
 
         // Handle when user joins voice channel or bot gets moved
-        if (newID === queueVC.id && !member?.user.bot) this.resumeTimeout(queueVCMembers, queue, newState);
+        if (newID === queueVC.id && !member?.user.bot) this.resumeTimeout(queueVCMembers, queue, newState); */
     }
 
     private doTimeout(vcMembers: Collection<Snowflake, GuildMember>, queue: ServerQueue, newState: IVoiceState): any {
-        try {
+        /* try {
             if (vcMembers.size !== 0) return;
             clearTimeout(queue.timeout!);
             newState.guild.queue!.timeout = null;
@@ -80,11 +80,11 @@ export class VoiceStateUpdateEvent extends BaseListener {
                     `If there's no one who joins the voice channel in the next **\`${duration}\`**, the queue will be deleted.`)
                     .setTitle("Music Player Paused")
             ).then(m => queue.lastVoiceStateUpdateMessageID = m.id).catch(e => this.client.logger.error("VOICE_STATE_UPDATE_EVENT_ERR:", e));
-        } catch (e) { this.client.logger.error("VOICE_STATE_UPDATE_EVENT_ERR:", e); }
+        } catch (e) { this.client.logger.error("VOICE_STATE_UPDATE_EVENT_ERR:", e); } */
     }
 
     private resumeTimeout(vcMembers: Collection<Snowflake, GuildMember>, queue: ServerQueue, newState: IVoiceState): any {
-        if (vcMembers.size > 0) {
+        /* if (vcMembers.size > 0) {
             if (queue.playing) return;
             try {
                 clearTimeout(queue.timeout!);
@@ -99,6 +99,6 @@ export class VoiceStateUpdateEvent extends BaseListener {
                 newState.guild.queue!.playing = true;
                 newState.guild.queue?.connection?.dispatcher.resume();
             } catch (e) { this.client.logger.error("VOICE_STATE_UPDATE_EVENT_ERR:", e); }
-        }
+        } */
     }
 }

@@ -15,16 +15,18 @@ export class VolumeCommand extends BaseCommand {
     @isMusicPlaying()
     @isSameVoiceChannel()
     public execute(message: IMessage, args: string[]): any {
-        const volume = parseInt(args[0]);
+        return message.channel.send({ embeds: [createEmbed("error", "Work in Progress")] });
 
-        if (isNaN(volume)) return message.channel.send(createEmbed("info", `The current volume is **\`${message.guild!.queue!.volume}\`**`));
+        // const volume = parseInt(args[0]);
 
-        if (volume <= 0) return message.channel.send(createEmbed("error", `Please, pause the music instead of setting the volume to **\`${volume}\`**`));
-        if (volume > 100) return message.channel.send(createEmbed("error", "You can't set the volume above **\`100\`**"));
+        // if (isNaN(volume)) return message.channel.send(createEmbed("info", `The current volume is **\`${message.guild!.queue!.volume}\`**`));
 
-        message.guild!.queue!.volume = volume;
-        message.guild!.queue!.connection?.dispatcher.setVolume(volume / 100);
+        // if (volume <= 0) return message.channel.send(createEmbed("error", `Please, pause the music instead of setting the volume to **\`${volume}\`**`));
+        // if (volume > 100) return message.channel.send(createEmbed("error", "You can't set the volume above **\`100\`**"));
 
-        return message.channel.send(createEmbed("info", `Volume set to **\`${volume}\`**`)).catch(() => null);
+        // message.guild!.queue!.volume = volume;
+        // message.guild!.queue!.connection?.dispatcher.setVolume(volume / 100);
+
+        // return message.channel.send(createEmbed("info", `Volume set to **\`${volume}\`**`)).catch(() => null);
     }
 }

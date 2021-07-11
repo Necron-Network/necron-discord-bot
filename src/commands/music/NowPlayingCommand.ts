@@ -14,6 +14,6 @@ export class NowPlayingCommand extends BaseCommand {
     @isMusicPlaying()
     public execute(message: IMessage): any {
         const song = message.guild!.queue!.songs.first()!;
-        return message.channel.send(createEmbed("info", `${message.guild?.queue?.playing ? "Paused" : "Playing"}: **[${song.title}](${song.url})**`).setThumbnail(song.thumbnail));
+        return message.channel.send({ embeds: [createEmbed("info", `${message.guild?.queue?.playing ? "Paused" : "Playing"}: **[${song.title}](${song.url})**`).setThumbnail(song.thumbnail)] });
     }
 }

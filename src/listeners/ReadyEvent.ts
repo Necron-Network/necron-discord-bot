@@ -29,9 +29,9 @@ export class ReadyEvent extends BaseListener {
     public formatString(text: string): string {
         return text
             .replace(/{users.size}/g, (this.client.users.cache.size - 1).toString())
-            .replace(/{textChannels.size}/g, this.client.channels.cache.filter(ch => ch.type === "text").size.toString())
+            .replace(/{textChannels.size}/g, this.client.channels.cache.filter(ch => ch.type === "GUILD_TEXT").size.toString())
             .replace(/{guilds.size}/g, this.client.guilds.cache.size.toString())
             .replace(/{username}/g, this.client.user?.username as string)
-            .replace(/{voiceChannels.size}/g, this.client.channels.cache.filter(ch => ch.type === "voice").size.toString());
+            .replace(/{voiceChannels.size}/g, this.client.channels.cache.filter(ch => ch.type === "GUILD_VOICE").size.toString());
     }
 }

@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, ColorResolvable } from "discord.js";
 
 type hexColorsType = "info" | "warn" | "error" | "success";
 const hexColors: Record<hexColorsType, string> = {
@@ -10,7 +10,7 @@ const hexColors: Record<hexColorsType, string> = {
 
 export function createEmbed(type: hexColorsType, message?: string): MessageEmbed {
     const embed = new MessageEmbed()
-        .setColor(hexColors[type]);
+        .setColor(hexColors[type] as ColorResolvable);
 
     if (message) embed.setDescription(message);
     return embed;

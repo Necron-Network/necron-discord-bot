@@ -1,5 +1,5 @@
 import { BaseCommand } from "../../structures/BaseCommand";
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, ColorResolvable } from "discord.js";
 import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 
@@ -16,7 +16,7 @@ export class PingCommand extends BaseCommand {
             const wsLatency = this.client.ws.ping.toFixed(0);
             const embed = new MessageEmbed()
                 .setAuthor("🏓 PONG!", message.client.user?.displayAvatarURL())
-                .setColor(this.searchHex(wsLatency))
+                .setColor(this.searchHex(wsLatency) as ColorResolvable)
                 .addFields({
                     name: "📶 API Latency",
                     value: `**\`${latency}\`** ms`,
@@ -29,7 +29,7 @@ export class PingCommand extends BaseCommand {
                 .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
                 .setTimestamp();
 
-            msg.edit(embed).then(() => msg.edit(" ")).catch(e => this.client.logger.error("PROMISE_ERR:", e));
+            msg.edit({ embeds: [embed] }).then(() => msg.edit(" ")).catch(e => this.client.logger.error("PROMISE_ERR:", e));
         }).catch(e => this.client.logger.error("PROMISE_ERR:", e));
         return message;
     }

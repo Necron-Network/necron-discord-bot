@@ -15,11 +15,11 @@ export class DocsCommand extends BaseCommand {
         const sources = ["stable", "master", "rpc", "commando", "akairo", "akairo-master", "collection", "11.5.1", "11.6.4"];
         try {
             if (!args.length) {
-                return message.channel.send(createEmbed("error", "Please provide a query"));
+                return message.channel.send({ embeds: [createEmbed("error", "Please provide a query")] });
             }
             const query = args[0];
             let source = args[1] ? args[1].toLowerCase() : "stable";
-            if (!sources.includes(source)) return message.channel.send(createEmbed("info", `Valid sources are: ${sources.map(x => `\`${x}\``).join(", ")}`));
+            if (!sources.includes(source)) return message.channel.send({ embeds: [createEmbed("info", `Valid sources are: ${sources.map(x => `\`${x}\``).join(", ")}`)] });
             if (source === "11.5.1" || source === "11.6.4") {
                 source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
             }
@@ -42,9 +42,9 @@ export class DocsCommand extends BaseCommand {
                 embed.description = "";
                 embed.title = "Search results";
             }
-            return message.channel.send({ embed });
+            return message.channel.send({ embeds: [embed] });
         } catch (err) {
-            return message.channel.send(createEmbed("error", `\`${err.message}\``));
+            return message.channel.send({ embeds: [createEmbed("error", `\`${err.message}\``)] });
         }
     }
 }

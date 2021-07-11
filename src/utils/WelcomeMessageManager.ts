@@ -38,7 +38,6 @@ export class WelcomeMessageManager {
                     value: this.parseString(String(f.value), member),
                     inline: f.inline
                 })),
-                files: data.props.embed.files,
                 footer: {
                     text: this.parseString(data.props.embed.footer?.text ?? "", member),
                     icon_url: this.parseString(data.props.embed.footer?.icon_url ?? "", member)
@@ -61,7 +60,7 @@ export class WelcomeMessageManager {
         }
 
         if (embed && (embedOnly ? true : data.props.embed?.enabled)) {
-            await ch.send(embedOnly ? "" : this.parseString(data.props.content, member), { embed });
+            await ch.send({ content: embedOnly ? "" : this.parseString(data.props.content, member), embeds: [embed] });
         } else {
             await ch.send(this.parseString(data.props.content, member));
         }

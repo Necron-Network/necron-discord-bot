@@ -2,19 +2,14 @@ import { ClientOptions, ClientPresenceStatus, Intents, UserResolvable } from "di
 
 export const defaultPrefix = ";";
 export const devs: UserResolvable[] = ["366169273485361153", "278121557665120267"]; // NOTE: Please change this
-export const clientOptions: ClientOptions = {               // https://discord.js.org/#/docs/main/stable/typedef/ClientOptions
-    allowedMentions: { parse: ["users", "everyone"] },    // NOTE: Please configure these after you're using this template,
-    fetchAllMembers: false,                 // especially allowedMentions, fetchAllMembers, messageCacheLifetime, messageSweepInterval, and Intents
-    messageCacheLifetime: 1800,            // and the other one if you want to configure them too, but mostly, allowedMentions to Intents should do
-    messageCacheMaxSize: Infinity,
-    messageEditHistoryMaxSize: Infinity,
+export const clientOptions: ClientOptions = {
+    allowedMentions: { parse: ["users", "everyone"] },
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS, Intents.FLAGS.GUILD_INVITES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_WEBHOOKS],
+    messageCacheLifetime: 1800,
     messageSweepInterval: 300,
     partials: ["MESSAGE", "GUILD_MEMBER", "CHANNEL", "REACTION", "USER"],
     restTimeOffset: 300,
-    retryLimit: 3,
-    ws: {
-        intents: [Intents.ALL] // NOTE: Please use Intents that you will only need
-    }
+    retryLimit: 3
 };
 export const isProd = process.env.NODE_ENV === "production";
 export const isDev = !isProd;

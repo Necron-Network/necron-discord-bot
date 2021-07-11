@@ -11,7 +11,7 @@ import { createEmbed } from "../../utils/createEmbed";
 export class FutanariCommand extends BaseCommand {
     public async execute(message: IMessage): Promise<any> {
         if (!(message.channel as ITextChannel).nsfw) {
-            return message.channel.send(createEmbed("error", "You can't use this command outside NSFW channel")).catch(() => undefined).then(m => {
+            return message.channel.send({ embeds: [createEmbed("error", "You can't use this command outside NSFW channel")] }).catch(() => undefined).then(m => {
                 if (!m) return;
 
                 setTimeout(() => {
@@ -22,8 +22,10 @@ export class FutanariCommand extends BaseCommand {
 
         const { url } = await this.client.request.get("https://nekos.life/api/v2/img/futanari").json<INekosLifeImgResponse>();
 
-        return message.channel.send(createEmbed("success").setTitle("Futanari Image").setURL(url)
-            .setImage(url)
-            .setAuthor("Click here if you don't see image", undefined, url));
+        return message.channel.send({
+            embeds: [createEmbed("success").setTitle("Futanari Image").setURL(url)
+                .setImage(url)
+                .setAuthor("Click here if you don't see image", undefined, url)]
+        });
     }
 }

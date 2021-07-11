@@ -36,15 +36,19 @@ export class GuildLogsManager {
                 mentions.push(...props.mentions.users.values());
                 mentions.push(...props.mentions.roles.values());
 
-                await channel.send(createEmbed("info", props.content).setAuthor(props.author.tag, props.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true })).setTitle("Ghost Ping Reminder")
-                    .addField("Mentions", mentions.map(x => x.toString()).join(" ")));
+                await channel.send({
+                    embeds: [createEmbed("info", props.content).setAuthor(props.author.tag, props.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true })).setTitle("Ghost Ping Reminder")
+                        .addField("Mentions", mentions.map(x => x.toString()).join(" "))]
+                });
                 break;
             case "message-delete":
-                await channel.send(createEmbed("info", props.content).setTitle(`Message in ${(channel.toString as (() => string))()} deleted`).setAuthor(props.author.tag, props.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))
-                    .setFooter(props.embeds.length ? "Message embed below" : ""));
+                await channel.send({
+                    embeds: [createEmbed("info", props.content).setTitle(`Message in ${(channel.toString as (() => string))()} deleted`).setAuthor(props.author.tag, props.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))
+                        .setFooter(props.embeds.length ? "Message embed below" : "")]
+                });
 
                 if (props.embeds.length) {
-                    await channel.send(props.embeds);
+                    await channel.send({ embeds: props.embeds });
                 }
                 break;
             default:

@@ -22,10 +22,12 @@ export class YandereCommand extends BaseCommand {
         const filtered = posts.filter(x => (!extException.includes(x.file_ext)) && ((message.channel as ITextChannel).nsfw ? true : (x.rating === "s")));
         const post = filtered[Math.floor(Math.random() * filtered.length)] as IYanderePost|undefined;
 
-        if (!post) return message.channel.send(createEmbed("error", "No result."));
+        if (!post) return message.channel.send({ embeds: [createEmbed("error", "No result.")] });
 
-        return message.channel.send(createEmbed("success").setTitle(`Yandere Image (${post.id})`).setURL(`https://yande.re/post/show/${post.id}`)
-            .setAuthor("Click here if you don't see image", undefined, post.file_url)
-            .setImage(post.file_url));
+        return message.channel.send({
+            embeds: [createEmbed("success").setTitle(`Yandere Image (${post.id})`).setURL(`https://yande.re/post/show/${post.id}`)
+                .setAuthor("Click here if you don't see image", undefined, post.file_url)
+                .setImage(post.file_url)]
+        });
     }
 }

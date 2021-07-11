@@ -15,9 +15,9 @@ export class VoteReminder {
     }
 
     public async emit(channelID: string): Promise<void> {
-        await ((await this.client.utils.fetchChannel(channelID)) as ITextChannel).send("@everyone",
-            {
-                embed: createEmbed("info", "Vote di minecraft-mp udah reset nih! Ayo Vote!\n\n> Global Vote:\n> https://minecraft-mp.com/server/285796/vote/").setTitle("Vote Reminder").toJSON()
-            });
+        await ((await this.client.utils.fetchChannel(channelID)) as ITextChannel).send({
+            content: "@everyone",
+            embeds: [createEmbed("info", "Vote di minecraft-mp udah reset nih! Ayo Vote!\n\n> Global Vote:\n> https://minecraft-mp.com/server/285796/vote/").setTitle("Vote Reminder")]
+        });
     }
 }

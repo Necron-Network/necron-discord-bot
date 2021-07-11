@@ -10,8 +10,8 @@ import { createEmbed } from "../../utils/createEmbed";
 })
 export class InviteCommand extends BaseCommand {
     public async execute(message: IMessage): Promise<any> {
-        const invite = await this.client.generateInvite({ permissions: ["ADMINISTRATOR"] });
+        const invite = await this.client.generateInvite({ permissions: ["ADMINISTRATOR"], scopes: ["bot"] });
 
-        return message.channel.send(createEmbed("info", `You can invite me using **[this link](${invite})**`));
+        return message.channel.send({ embeds: [createEmbed("info", `You can invite me using **[this link](${invite})**`)] });
     }
 }

@@ -2,6 +2,7 @@ import { BaseCommand } from "../../structures/BaseCommand";
 import { IMessage, IAntiInvite } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
+import { Snowflake } from "discord.js";
 
 @DefineCommand({
     aliases: ["antiinvitelink"],
@@ -12,12 +13,12 @@ import { createEmbed } from "../../utils/createEmbed";
 export class AntiInviteCommand extends BaseCommand {
     public readonly options: Record<string, (message: IMessage, args: string[]) => any> = {
         enable: async (message: IMessage) => {
-            if (!this.client.db) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
-            if (!message.member!.hasPermission("MANAGE_GUILD")) return message.channel.send(createEmbed("error", "You don't have `Manage Server` permission to use this command!"));
+            if (!this.client.db) return message.channel.send({ embeds: [createEmbed("error", "Couldn't contact database. Please, try again later.")] });
+            if (!message.member?.permissions.has("MANAGE_GUILD")) return message.channel.send({ embeds: [createEmbed("error", "You don't have `Manage Server` permission to use this command!")] });
 
             const collection = this.client.db.collection<IAntiInvite>("antiinvite");
             let data = await collection.findOne({ guild: message.guild!.id });
-            if (data?.enabled) return message.channel.send(createEmbed("error", "Anti invite already enabled"));
+            if (data?.enabled) return message.channel.send({ embeds: [createEmbed("error", "Anti invite already enabled")] });
 
             data = {
                 guild: message.guild!.id,
@@ -25,33 +26,33 @@ export class AntiInviteCommand extends BaseCommand {
                 enabled: true
             };
             return collection.insertOne(data).catch(() => undefined).then(result => {
-                if (!result) return message.channel.send(createEmbed("error", "Unable to enable anti invite for your server. Please, try again later."));
+                if (!result) return message.channel.send({ embeds: [createEmbed("error", "Unable to enable anti invite for your server. Please, try again later.")] });
 
-                return message.channel.send(createEmbed("success", "Anti invite enabled"));
+                return message.channel.send({ embeds: [createEmbed("success", "Anti invite enabled")] });
             });
         },
         disable: async (message: IMessage) => {
-            if (!this.client.db) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
-            if (!message.member!.hasPermission("MANAGE_GUILD")) return message.channel.send(createEmbed("error", "You don't have `Manage Server` permission to use this command!"));
+            if (!this.client.db) return message.channel.send({ embeds: [createEmbed("error", "Couldn't contact database. Please, try again later.")] });
+            if (!message.member?.permissions.has("MANAGE_GUILD")) return message.channel.send({ embeds: [createEmbed("error", "You don't have `Manage Server` permission to use this command!")] });
 
             const collection = this.client.db.collection<IAntiInvite>("antiinvite");
             const data = await collection.findOne({ guild: message.guild!.id });
-            if (!data || !data.enabled) return message.channel.send(createEmbed("error", "Anti invite already disabled"));
+            if (!data || !data.enabled) return message.channel.send({ embeds: [createEmbed("error", "Anti invite already disabled")] });
 
             return collection.deleteOne({ guild: message.guild!.id }).catch(() => undefined).then(result => {
-                if (!result) return message.channel.send(createEmbed("error", "Unable to disable anti invite for your server."));
+                if (!result) return message.channel.send({ embeds: [createEmbed("error", "Unable to disable anti invite for your server.")] });
 
-                return message.channel.send(createEmbed("success", "Anti invite disabled"));
+                return message.channel.send({ embeds: [createEmbed("success", "Anti invite disabled")] });
             });
         },
         whitelist: async (message: IMessage, args: string[]) => {
-            if (!this.client.db) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
-            if (!message.member!.hasPermission("MANAGE_GUILD")) return message.channel.send(createEmbed("error", "You don't have `Manage Server` permission to use this command!"));
+            if (!this.client.db) return message.channel.send({ embeds: [createEmbed("error", "Couldn't contact database. Please, try again later.")] });
+            if (!message.member?.permissions.has("MANAGE_GUILD")) return message.channel.send({ embeds: [createEmbed("error", "You don't have `Manage Server` permission to use this command!")] });
 
-            if (!args[0] || args[0].length !== 18 || isNaN(Number(args[0]))) return message.channel.send(createEmbed("error", "Invalid Role ID"));
+            if (!args[0] || args[0].length !== 18 || isNaN(Number(args[0]))) return message.channel.send({ embeds: [createEmbed("error", "Invalid Role ID")] });
 
-            const role = message.guild!.roles.cache.get(args[0]) ?? await message.guild!.roles.fetch(args[0]).catch(() => undefined);
-            if (!role) return message.channel.send(createEmbed("error", "Invalid Role ID"));
+            const role = message.guild?.roles.cache.get(args[0] as Snowflake) ?? await message.guild?.roles.fetch(args[0] as Snowflake)?.catch(() => undefined);
+            if (!role) return message.channel.send({ embeds: [createEmbed("error", "Invalid Role ID")] });
 
             const collection = this.client.db.collection<IAntiInvite>("antiinvite");
             let data = await collection.findOne({ guild: message.guild!.id });
@@ -70,9 +71,9 @@ export class AntiInviteCommand extends BaseCommand {
                 result = await collection.insertOne(data);
             }
 
-            if (!result) return message.channel.send(createEmbed("error", "Unable to whitelist that role for this server anti invite."));
+            if (!result) return message.channel.send({ embeds: [createEmbed("error", "Unable to whitelist that role for this server anti invite.")] });
 
-            return message.channel.send(createEmbed("success", `Role \`${role.name}\`(${role.id}) whitelisted`));
+            return message.channel.send({ embeds: [createEmbed("success", `Role \`${role.name}\`(${role.id}) whitelisted`)] });
         }
     };
 

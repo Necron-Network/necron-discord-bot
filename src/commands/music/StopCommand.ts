@@ -15,12 +15,14 @@ export class StopCommand extends BaseCommand {
     @isMusicPlaying()
     @isSameVoiceChannel()
     public execute(message: IMessage): any {
-        if (message.guild?.queue?.lastMusicMessageID) message.guild.queue.textChannel?.messages.fetch(message.guild.queue.lastMusicMessageID, false).catch(() => undefined).then(m => m?.delete());
-        if (message.guild?.queue?.lastVoiceStateUpdateMessageID) message.guild.queue.textChannel?.messages.fetch(message.guild.queue.lastVoiceStateUpdateMessageID, false).catch(() => undefined).then(m => m?.delete());
+        return message.channel.send({ embeds: [createEmbed("error", "Work in Progress")] });
 
-        message.guild?.queue?.voiceChannel?.leave();
-        delete message.guild?.queue;
+        // if (message.guild?.queue?.lastMusicMessageID) message.guild.queue.textChannel?.messages.fetch(message.guild.queue.lastMusicMessageID, false).catch(() => undefined).then(m => m?.delete());
+        // if (message.guild?.queue?.lastVoiceStateUpdateMessageID) message.guild.queue.textChannel?.messages.fetch(message.guild.queue.lastVoiceStateUpdateMessageID, false).catch(() => undefined).then(m => m?.delete());
 
-        return message.channel.send(createEmbed("info", "The music player has been stopped")).catch(() => null);
+        // message.guild?.queue?.voiceChannel?.leave();
+        // delete message.guild?.queue;
+
+        // return message.channel.send(createEmbed("info", "The music player has been stopped")).catch(() => null);
     }
 }

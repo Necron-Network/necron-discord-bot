@@ -13,10 +13,10 @@ import { MessageAttachment } from "discord.js";
 })
 export class AfkCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        if (!this.client.db) return message.channel.send(createEmbed("error", "Couldn't contact database. Please, try again later."));
+        if (!this.client.db) return message.channel.send({ embeds: [createEmbed("error", "Couldn't contact database. Please, try again later.")] });
 
         const collection = this.client.db.collection<IAfk>("afk");
-        if ((await collection.findOne({ user: message.author.id }))) return message.channel.send(createEmbed("error", "You're already AFK"));
+        if ((await collection.findOne({ user: message.author.id }))) return message.channel.send({ embeds: [createEmbed("error", "You're already AFK")] });
 
         const reason = args.join(" ");
         let attachment = message.attachments.filter(x => {
@@ -26,7 +26,7 @@ export class AfkCommand extends BaseCommand {
         }).first()?.url ?? "";
 
         if (attachment !== "") {
-            const msg = await ((await this.client.utils.fetchChannel("848785076241694732")) as ITextChannel).send(new MessageAttachment(attachment));
+            const msg = await ((await this.client.utils.fetchChannel("848785076241694732")) as ITextChannel).send({ files: [new MessageAttachment(attachment)] });
             attachment = msg.attachments.first()!.url;
         }
 
@@ -37,7 +37,7 @@ export class AfkCommand extends BaseCommand {
             .setThumbnail(message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))
             .setFooter("Use --pass to bypass AFK");
         if (attachment !== "") embed.setImage(attachment);
-        const afkMsg = await message.channel.send(embed);
+        const afkMsg = await message.channel.send({ embeds: [embed] });
 
         return collection.insertOne({
             afkChannel: afkMsg.channel.id,

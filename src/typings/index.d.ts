@@ -1,4 +1,4 @@
-import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, ClientEvents, Guild, VoiceState } from "discord.js";
+import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, ClientEvents, Guild, VoiceState, MessageOptions, MessagePayload, ReplyMessageOptions } from "discord.js";
 import { NecronClient } from "../structures/NecronClient";
 import { ServerQueue } from "../structures/ServerQueue";
 import { ServerVoiceRecorder } from "../structures/ServerVoiceRecorder";
@@ -51,53 +51,32 @@ export interface IMessage extends Message {
     public channel: ITextChannel | IDMChannel | INewsChannel;
     client: NecronClient;
     guild?: IGuild;
+    reply(
+        options: string|MessagePayload|ReplyMessageOptions
+    ): Promise<IMessage>;
 }
 export interface ITextChannel extends TextChannel {
     lastMessageID: Snowflake | null;
     readonly lastMessage: IMessage | null;
     send(
-        options: MessageOptions | (MessageOptions & { split?: false }) | MessageAdditions | APIMessage,
+        options: string|MessageOptions|MessagePayload,
     ): Promise<IMessage>;
-    send(
-        options: (MessageOptions & { split: true | SplitOptions; content: StringResolvable }) | APIMessage,
-    ): Promise<IMessage[]>;
-    send(
-        content: StringResolvable,
-        options?: MessageOptions | (MessageOptions & { split?: false }) | MessageAdditions,
-    ): Promise<IMessage>;
-    send(content: StringResolvable, options?: MessageOptions & { split: true | SplitOptions }): Promise<IMessage[]>;
 }
 
 export interface IDMChannel extends DMChannel {
     lastMessageID: Snowflake | null;
     readonly lastMessage: IMessage | null;
     send(
-        options: MessageOptions | (MessageOptions & { split?: false }) | MessageAdditions | APIMessage,
+        options: string|MessageOptions|MessagePayload,
     ): Promise<IMessage>;
-    send(
-        options: (MessageOptions & { split: true | SplitOptions; content: StringResolvable }) | APIMessage,
-    ): Promise<IMessage[]>;
-    send(
-        content: StringResolvable,
-        options?: MessageOptions | (MessageOptions & { split?: false }) | MessageAdditions,
-    ): Promise<IMessage>;
-    send(content: StringResolvable, options?: MessageOptions & { split: true | SplitOptions }): Promise<IMessage[]>;
 }
 
 export interface INewsChannel extends NewsChannel {
     lastMessageID: Snowflake | null;
     readonly lastMessage: IMessage | null;
     send(
-        options: MessageOptions | (MessageOptions & { split?: false }) | MessageAdditions | APIMessage,
+        options: string|MessageOptions|MessagePayload,
     ): Promise<IMessage>;
-    send(
-        options: (MessageOptions & { split: true | SplitOptions; content: StringResolvable }) | APIMessage,
-    ): Promise<IMessage[]>;
-    send(
-        content: StringResolvable,
-        options?: MessageOptions | (MessageOptions & { split?: false }) | MessageAdditions,
-    ): Promise<IMessage>;
-    send(content: StringResolvable, options?: MessageOptions & { split: true | SplitOptions }): Promise<IMessage[]>;
 }
 
 export interface IAntiInvite {

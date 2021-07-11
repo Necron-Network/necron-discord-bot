@@ -12,7 +12,7 @@ import { createEmbed } from "../../utils/createEmbed";
 export class CreateActivityCommand extends BaseCommand {
     @isUserInTheVoiceChannel()
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        if (!message.member?.voice.channel?.permissionsFor(this.client.user!.id)?.has("CREATE_INSTANT_INVITE")) return message.channel.send(createEmbed("error", "I don't have `Create Invite` permission in your voice channel"));
+        if (!message.member?.voice.channel?.permissionsFor(this.client.user!.id)?.has("CREATE_INSTANT_INVITE")) return message.channel.send({ embeds: [createEmbed("error", "I don't have `Create Invite` permission in your voice channel")] });
 
         const applicationIds: Record<string, string|undefined> = {
             youtube: process.env.YOUTUBE_ACTIVITY_ID,
@@ -21,7 +21,7 @@ export class CreateActivityCommand extends BaseCommand {
             fishington: process.env.FISHINGTON_ID
         };
         const targetApplicationID = applicationIds[args[0]];
-        if (!targetApplicationID) return message.channel.send(createEmbed("error", `Invalid activity type. Valid activity types are: ${Object.keys(applicationIds).map(x => `\`${x}\``).join(", ")}`));
+        if (!targetApplicationID) return message.channel.send({ embeds: [createEmbed("error", `Invalid activity type. Valid activity types are: ${Object.keys(applicationIds).map(x => `\`${x}\``).join(", ")}`)] });
 
         const inviteData = await this.client.request.post(`https://discord.com/api/v8/channels/${message.member.voice.channel.id}/invites`, {
             headers: {
@@ -34,6 +34,6 @@ export class CreateActivityCommand extends BaseCommand {
                 target_application_id: targetApplicationID
             })
         }).json<{ code: string }>();
-        return message.channel.send(createEmbed("success", `[Click this link to join activity](https://discord.gg/${inviteData.code})`));
+        return message.channel.send({ embeds: [createEmbed("success", `[Click this link to join activity](https://discord.gg/${inviteData.code})`)] });
     }
 }

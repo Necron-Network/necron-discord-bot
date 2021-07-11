@@ -1,5 +1,5 @@
 import { NecronClient } from "../structures/NecronClient";
-import { Channel, User } from "discord.js";
+import { Channel, User, Snowflake } from "discord.js";
 import { IGuild } from "../typings";
 
 export class NecronUtils {
@@ -8,10 +8,10 @@ export class NecronUtils {
     public async fetchGuild(id: string, fromShard?: boolean): Promise<IGuild|undefined> {
         let data: IGuild|undefined;
         if (fromShard) {
-            const fetchData = (await this.client.shard?.broadcastEval(c => c.guilds.cache.get(id))) as (IGuild|undefined)[]|undefined;
+            const fetchData = (await this.client.shard?.broadcastEval(c => c.guilds.cache.get(id as Snowflake))) as (IGuild|undefined)[]|undefined;
             data = fetchData?.find(g => g?.id === id);
         } else {
-            data = this.client.guilds.cache.get(id) ?? this.client.guilds.fetch(id).catch(() => undefined);
+            data = this.client.guilds.cache.get(id as Snowflake) ?? this.client.guilds.fetch(id as Snowflake).catch(() => undefined);
         }
 
         return data;
@@ -33,8 +33,8 @@ export class NecronUtils {
         return result.length;
     }
 
-    public async fetchChannel(id: string): Promise<Channel|undefined> {
-        return this.client.channels.cache.get(id) ?? this.client.channels.fetch(id).catch(() => undefined);
+    public async fetchChannel(id: string): Promise<Channel|null|undefined> {
+        return this.client.channels.cache.get(id as Snowflake) ?? this.client.channels.fetch(id as Snowflake).catch(() => undefined);
     }
 
     public async fetchChannelAmountFromShard(): Promise<number> {
@@ -54,7 +54,7 @@ export class NecronUtils {
     }
 
     public async fetchUser(id: string): Promise<User|undefined> {
-        return this.client.users.cache.get(id) ?? this.client.users.fetch(id).catch(() => undefined);
+        return this.client.users.cache.get(id as Snowflake) ?? this.client.users.fetch(id as Snowflake).catch(() => undefined);
     }
 
     public async fetchUserAmountFromShard(): Promise<number> {

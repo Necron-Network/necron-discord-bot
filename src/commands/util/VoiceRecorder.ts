@@ -3,7 +3,6 @@ import { IMessage, ITextChannel } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { isUserInTheVoiceChannel, isSameVoiceChannel, isValidVoiceChannel } from "../../utils/decorators/MusicHelper";
 import { createEmbed } from "../../utils/createEmbed";
-import { ServerVoiceRecorder } from "../../structures/ServerVoiceRecorder";
 
 @DefineCommand({
     description: "Voice recorder util",
@@ -15,7 +14,7 @@ export class VoiceRecorder extends BaseCommand {
     @isSameVoiceChannel()
     @isValidVoiceChannel(true)
     public async execute(message: IMessage): Promise<any> {
-        return message.channel.send(createEmbed("info", "Coming soon."));
+        return message.channel.send({ embeds: [createEmbed("info", "Coming soon.")] });
 
         /* if (message.guild?.me?.voice.selfDeaf) await message.guild.me.voice.setSelfDeaf(false);
         if (message.guild?.me?.voice.deaf) {

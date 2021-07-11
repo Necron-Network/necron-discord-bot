@@ -13,7 +13,7 @@ import { MessageReaction, User } from "discord.js";
 })
 export class InfractionsCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        if (!message.member?.hasPermission("MANAGE_GUILD")) return message.channel.send(createEmbed("error", "You don't have permission to use this command"));
+        if (!message.member?.permissions.has("MANAGE_GUILD")) return message.channel.send({ embeds: [createEmbed("error", "You don't have permission to use this command")] });
 
         const user = message.mentions.users.first() ?? await this.client.utils.fetchUser(args[0]) ?? message.author;
         const infractions = await this.client.infraction.fetchUserInfractions({ userID: user.id, guildID: message.guild!.id });
@@ -26,7 +26,7 @@ export class InfractionsCommand extends BaseCommand {
         if (infractions.length <= 10) {
             const description = infractions.length ? infractions.map((x, i) => `${i + 1} - ${x.reason ?? "No reason"}`).join("\n") : "No infraction";
 
-            await message.channel.send(createEmbed("info", description).setAuthor(`${user?.tag ?? "Unknown User#0000"} infractions`, user?.displayAvatarURL({ format: "png", size: 2048, dynamic: true })));
+            await message.channel.send({ embeds: [createEmbed("info", description).setAuthor(`${user?.tag ?? "Unknown User#0000"} infractions`, user?.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))] });
         } else {
             let page = 0;
             const pages = chunk(infractions, 10);
@@ -38,15 +38,17 @@ export class InfractionsCommand extends BaseCommand {
 
             syncEmbed();
 
-            const msg = await message.channel.send(embed);
+            const msg = await message.channel.send({ embeds: [embed] });
             const reactions = ["◀️", "▶️"];
 
             await msg.react("◀️").catch(() => null);
             await msg.react("▶️").catch(() => null);
 
-            const collector = msg.createReactionCollector((r: MessageReaction, u: User) => (u.id === message.author.id) && (reactions.includes(r.emoji.name)));
+            const collector = msg.createReactionCollector({
+                filter: (r: MessageReaction, u: User) => (u.id === message.author.id) && (reactions.includes(r.emoji.name!))
+            });
             collector.on("collect", async (reaction: MessageReaction) => {
-                switch (reaction.emoji.name) {
+                switch (reaction.emoji.name!) {
                     case "◀️":
                         page--;
                         if (page < 0) page = 0;
@@ -58,7 +60,7 @@ export class InfractionsCommand extends BaseCommand {
                 }
 
                 syncEmbed();
-                await msg.edit(embed);
+                await msg.edit({ embeds: [embed] });
             });
         }
     }

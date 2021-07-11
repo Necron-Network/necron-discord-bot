@@ -1,4 +1,4 @@
-import { ITextChannel } from "../typings";
+/* import { ITextChannel } from "../typings";
 import { VoiceConnection, VoiceChannel } from "discord.js";
 import { Readable } from "stream";
 
@@ -23,4 +23,4 @@ export class ServerVoiceRecorder {
     public set recording(state: boolean) {
         this._recording = state;
     }
-}
+} */

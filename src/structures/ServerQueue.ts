@@ -1,9 +1,8 @@
 import { ITextChannel } from "../typings";
 import { SongManager } from "../utils/SongManager";
-import { Snowflake, VoiceChannel, VoiceConnection } from "discord.js";
+import { Snowflake, VoiceChannel } from "discord.js";
 
 export class ServerQueue {
-    public connection: VoiceConnection | null = null;
     public readonly songs = new SongManager();
     public volume = 100;
     public loop = false;

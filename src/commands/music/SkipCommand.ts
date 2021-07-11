@@ -15,12 +15,14 @@ export class SkipCommand extends BaseCommand {
     @isMusicPlaying()
     @isSameVoiceChannel()
     public execute(message: IMessage): any {
+        return message.channel.send({ embeds: [createEmbed("error", "Work in Progress")] });
+
         message.guild!.queue!.playing = true;
-        message.guild?.queue?.connection?.dispatcher.once("speaking", () => message.guild?.queue?.connection?.dispatcher.end());
-        message.guild!.queue?.connection?.dispatcher.resume();
+        // message.guild?.queue?.connection?.dispatcher.once("speaking", () => message.guild?.queue?.connection?.dispatcher.end());
+        // message.guild!.queue?.connection?.dispatcher.resume();
 
         const song = message.guild?.queue?.songs.first();
 
-        return message.channel.send(createEmbed("info", `Skipped **[${song!.title}](${song!.url})**`).setThumbnail(song!.thumbnail)).catch(() => null);
+        return message.channel.send({ embeds: [createEmbed("info", `Skipped **[${song!.title}](${song!.url})**`).setThumbnail(song!.thumbnail)] }).catch(() => null);
     }
 }
