@@ -32,7 +32,7 @@ export class HelpCommand extends BaseCommand {
                 .setThumbnail(message.client.user?.displayAvatarURL() as string)
                 .setTimestamp()
                 .setFooter(`${message.client.config.prefix}help <command> to get more info on a specific command!`, "https://hzmi.xyz/assets/images/390511462361202688.png")
-                .setDescription("**Select a category from the dropdown/select menu**");
+                .setDescription("**Use the dropdown/select menu to show a category**");
             const categories = message.client.commands.categories.map((v, k) => {
                 const isDev = this.client.config.devs.includes(message.author.id);
                 const cmds = v.cmds.filter(c => isDev ? true : !c.meta.devOnly).map(c => `\`${c.meta.name}\``);
