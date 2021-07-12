@@ -1,5 +1,5 @@
 import { BaseCommand } from "../../structures/BaseCommand";
-import { MessageEmbed, EmbedFieldData } from "discord.js";
+import { MessageEmbed, EmbedFieldData, MessageSelectMenu } from "discord.js";
 import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 
@@ -31,15 +31,72 @@ export class HelpCommand extends BaseCommand {
                 .setColor("#00FF00")
                 .setThumbnail(message.client.user?.displayAvatarURL() as string)
                 .setTimestamp()
-                .setFooter(`${message.client.config.prefix}help <command> to get more info on a specific command!`, "https://hzmi.xyz/assets/images/390511462361202688.png");
-            for (const category of message.client.commands.categories.array()) {
-                const isDev = this.client.config.devs.includes(message.author.id); // note: add function to core
-                const cmds = category.cmds.filter(c => isDev ? true : !c.meta.devOnly).map(c => `\`${c.meta.name}\``);
-                if (cmds.length === 0) continue;
-                if (category.hide && !isDev) continue; // This hides category that is want to be hided from the meta
-                embed.addField(`**${category.name}**`, cmds.join(", "));
+                .setFooter(`${message.client.config.prefix}help <command> to get more info on a specific command!`, "https://hzmi.xyz/assets/images/390511462361202688.png")
+                .setDescription("**Select a category from the dropdown/select menu**");
+            const categories = message.client.commands.categories.map((v, k) => {
+                const isDev = this.client.config.devs.includes(message.author.id);
+                const cmds = v.cmds.filter(c => isDev ? true : !c.meta.devOnly).map(c => `\`${c.meta.name}\``);
+                if (!cmds.length) return undefined;
+                if (v.hide && !isDev) return undefined;
+
+                return {
+                    id: k.toUpperCase(),
+                    category: v,
+                    cmds
+                };
+            });
+
+            let current: string[] = [];
+
+            function syncEmbed(id: string): boolean {
+                const category = categories.find(c => c?.id === id);
+                if (!category) return false;
+
+                embed.addField(`**${category.category.name}**`, category.cmds.join(", "));
+                return true;
             }
-            message.channel.send({ embeds: [embed] }).catch(e => this.client.logger.error("PROMISE_ERR:", e));
+
+            const menu = new MessageSelectMenu()
+                .setCustomId("HELP_SELECT_MENU");
+
+            for (const category of categories) {
+                if (!category) continue;
+
+                menu.addOptions([{
+                    label: category.category.name,
+                    value: category.id
+                }]);
+            }
+
+            const msg = await message.channel.send({ embeds: [embed], components: [[menu]] });
+            const collector = msg.createMessageComponentCollector({
+                filter: i => {
+                    void i.deferUpdate();
+
+                    return i.customId === "HELP_SELECT_MENU" && i.user.id === message.author.id;
+                }
+            });
+
+            collector.on("collect", async i => {
+                if (!i.isSelectMenu()) return;
+
+                const selections = categories.filter(c => i.values.includes(c?.id as string));
+                if (!selections.length) return;
+
+                current = [];
+                embed.fields = [];
+
+                for (const selection of selections) {
+                    if (!selection) continue;
+
+                    const res = syncEmbed(selection.id);
+                    if (res) current.push(selection.id);
+                }
+
+                if (!current.length) return;
+
+                await msg.edit({ embeds: [embed], components: [[menu]] });
+            });
         }
     }
 }
