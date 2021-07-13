@@ -2,7 +2,8 @@ import { BaseCommand } from "../../structures/BaseCommand";
 import { IMessage, ITextChannel, INHentaiGallery, INHentaiGalleryTag } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
-import { MessageReaction, User, Collection, ColorResolvable } from "discord.js";
+import { createButton } from "../../utils/createButton";
+import { ColorResolvable } from "discord.js";
 
 @DefineCommand({
     aliases: ["nh"],
@@ -44,22 +45,24 @@ export class NHentaiCommand extends BaseCommand {
     }
 
     private async handleGallery(gallery: INHentaiGallery, message: IMessage): Promise<any> {
+        const readButton = createButton("PRIMARY", "Read").setCustomId("READ");
+
         const msg = await message.channel.send({
             embeds: [createEmbed("info").setColor("EC2854" as ColorResolvable).setTitle(gallery.title.pretty)
                 .setURL(`https://nhentai.net/g/${gallery.id}`)
                 .setImage(`https://t.nhentai.net/galleries/${gallery.media_id}/cover.${this.parseImgType(gallery.images.cover.t)}`)
-                .setFooter("React with 📖 to read.")
+                .setFooter("Use \"Read\" button to read.")
                 .addField("Language", (gallery.tags.filter(x => (x.type === "language") && (x.name !== "translated"))[0] as INHentaiGalleryTag|undefined)?.name ?? "No Information")
-                .setAuthor(message.author.username, message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))]
+                .setAuthor(message.author.username, message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))],
+            components: [[readButton]]
         }).catch(() => undefined);
 
         if (!msg) return;
-        await msg.react("📖");
-        const collector = msg.createReactionCollector({
-            filter: (reaction: MessageReaction, user: User) => (user.id === message.author.id) && (reaction.emoji.name === "📖")
+        const collector = msg.createMessageComponentCollector({
+            filter: i => (i.user.id === message.author.id) && (i.customId === "READ")
         });
         collector.on("collect", () => collector.stop("read"));
-        collector.on("end", async (collected: Collection<string, MessageReaction>, reason: string) => {
+        collector.on("end", async (collected, reason) => {
             if (reason === "read") {
                 await msg.delete().catch(() => null);
                 return this.initializeReader(gallery, message);
@@ -78,29 +81,30 @@ export class NHentaiCommand extends BaseCommand {
 
         syncEmbed();
 
-        const msg = await message.channel.send({ embeds: [embed] });
-        const reactions = ["◀️", "▶️"];
+        const prevButton = createButton("PRIMARY", "Previous").setEmoji("◀️").setCustomId("PREV");
+        const stopButton = createButton("DANGER", "Stop reading").setCustomId("STOP");
+        const nextButton = createButton("PRIMARY", "Next").setEmoji("▶️").setCustomId("NEXT");
 
-        await msg.react("◀️").catch(() => null);
-        await msg.react("▶️").catch(() => null);
+        const msg = await message.channel.send({ embeds: [embed], components: [[prevButton, stopButton, nextButton]] });
 
-        const collector = msg.createReactionCollector({
-            filter: (reaction: MessageReaction, user: User) => (user.id === message.author.id) && (reactions.includes(reaction.emoji.name!))
+        const collector = msg.createMessageComponentCollector({
+            filter: i => (i.user.id === message.author.id) && (["PREV", "STOP", "NEXT"].includes(i.customId))
         });
-        collector.on("collect", async (reaction: MessageReaction) => {
-            switch (reaction.emoji.name!) {
-                case "◀️":
-                    page--;
-                    if (page < 0) page = 0;
-                    break;
-                case "▶️":
-                    page++;
-                    if (page >= pages.length) page = pages.length - 1;
-                    break;
+
+        collector.on("collect", async i => {
+            if (i.customId === "PREV") {
+                page--;
+                if (page < 0) page = 0;
+            } else if (i.customId === "NEXT") {
+                page++;
+                if (page >= pages.length) page = pages.length - 1;
+            } else {
+                await msg.delete();
+                return;
             }
 
             syncEmbed();
-            await msg.edit({ embeds: [embed] });
+            await msg.edit({ embeds: [embed], components: [[prevButton, stopButton, nextButton]] });
         });
     }
 

@@ -2,6 +2,7 @@ import { BaseCommand } from "../../structures/BaseCommand";
 import { IMessage, ITextChannel, INekosLifeImgResponse } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
+import { createButton } from "../../utils/createButton";
 
 @DefineCommand({
     description: "Gives you a random lewd neko image",
@@ -20,12 +21,46 @@ export class LewdNekoCommand extends BaseCommand {
             });
         }
 
-        const { url } = await this.client.request.get("https://nekos.life/api/v2/img/lewd").json<INekosLifeImgResponse>();
+        const fetchImg = async (): Promise<INekosLifeImgResponse> => this.client.request.get("https://nekos.life/api/v2/img/lewd").json<INekosLifeImgResponse>();
+        const embed = createEmbed("success").setTitle("Lewd Neko Image");
+        let img = await fetchImg();
 
-        return message.channel.send({
-            embeds: [createEmbed("success").setTitle("Lewd Neko Image").setURL(url)
-                .setImage(url)
-                .setAuthor("Click here if you don't see image", undefined, url)]
+        function syncEmbed(): void {
+            embed.setURL(img.url)
+                .setImage(img.url)
+                .setAuthor("Click here if you don't see image", undefined, img.url);
+        }
+
+        syncEmbed();
+
+        const stopButton = createButton("DANGER", "Stop").setCustomId("STOP");
+        const nextButton = createButton("PRIMARY", "Next").setEmoji("➡️").setCustomId("NEXT");
+
+        const msg = await message.channel.send({
+            embeds: [embed],
+            components: [[stopButton, nextButton]]
+        });
+
+        const collector = msg.createMessageComponentCollector({
+            filter: i => {
+                void i.deferUpdate();
+
+                return ["NEXT", "STOP"].includes(i.customId) && i.user.id === message.author.id;
+            }
+        });
+
+        collector.on("collect", async i => {
+            if (i.customId === "NEXT") {
+                img = await fetchImg();
+
+                syncEmbed();
+                await msg.edit({
+                    embeds: [embed],
+                    components: [[stopButton, nextButton]]
+                });
+            } else {
+                await msg.delete();
+            }
         });
     }
 }
