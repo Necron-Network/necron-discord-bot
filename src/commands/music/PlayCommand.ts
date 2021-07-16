@@ -57,8 +57,9 @@ export class PlayCommand extends BaseCommand {
                     time: 15000,
                     filter: i => {
                         void i.deferUpdate();
+                        if (!i.isSelectMenu()) return false;
 
-                        return (message.author.id === i.user.id) && (i.customId === "CANCEL" || i.customId.startsWith("MUSIC-"));
+                        return (message.author.id === i.user.id) && (i.values.includes("CANCEL") || i.values.some(x => x.startsWith("MUSIC-")));
                     }
                 }).catch(() => undefined);
 
