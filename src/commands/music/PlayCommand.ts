@@ -55,8 +55,11 @@ export class PlayCommand extends BaseCommand {
 
                 const response = await message.channel.awaitMessageComponent({
                     time: 15000,
-                    componentType: "SELECT_MENU",
-                    filter: i => (message.author.id === i.user.id) && (i.customId === "CANCEL" || i.customId.startsWith("MUSIC-"))
+                    filter: i => {
+                        void i.deferUpdate();
+
+                        return (message.author.id === i.user.id) && (i.customId === "CANCEL" || i.customId.startsWith("MUSIC-"));
+                    }
                 }).catch(() => undefined);
 
                 if (!response) return message.channel.send({ embeds: [createEmbed("error", "No valid input was given, music selection canceled")] });
