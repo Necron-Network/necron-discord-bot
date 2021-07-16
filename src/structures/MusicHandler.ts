@@ -1,7 +1,7 @@
 import { createEmbed } from "../utils/createEmbed";
 import { SongManager } from "../utils/SongManager";
 import { IGuild, ITextChannel } from "../typings";
-import { VoiceConnection, AudioPlayer, createAudioPlayer, VoiceConnectionStatus, AudioPlayerStatus } from "@discordjs/voice";
+import { VoiceConnection, AudioPlayer, createAudioPlayer, VoiceConnectionStatus, AudioPlayerStatus, AudioPlayerState } from "@discordjs/voice";
 import { Snowflake, VoiceChannel } from "discord.js";
 
 export class MusicHandler {
@@ -32,8 +32,15 @@ export class MusicHandler {
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 this.guild.client.logger.info(`${this.guild.client.shard ? `[Shard #${this.guild.client.shard.ids}]` : ""} Music: "${song.data.title}" on ${this.guild.name} has ended`);
                 this.songs.deleteFirst();
-                this.textChannel.send({ embeds: [createEmbed("info", `Started playing: **[${song.data.title}](${song.data.url})**`).setThumbnail(song.data.thumbnail)] }).catch(() => undefined);
-            } else if (newState.status === AudioPlayerStatus.Playing) {
+                this.textChannel.send({ embeds: [createEmbed("info", `Started playing: **[${song.data.title}](${song.data.url})**`).setThumbnail(song.data.thumbnail)] })
+                    .catch(() => undefined)
+                    .finally(() => {
+                        this.play().catch(e => {
+                            this.textChannel.send({ embeds: [createEmbed("error", `An error occured while trying to play music\n\`\`\`${e.message}\`\`\``)] }).catch(() => null);
+                            this.connection.destroy();
+                        });
+                    });
+            } else if (oldState.status === AudioPlayerStatus.Idle && newState.status === AudioPlayerStatus.Playing) {
                 const song = this.songs.first()!;
 
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -41,13 +48,7 @@ export class MusicHandler {
                 if (this.lastMusicMessageID) void this.textChannel.messages.fetch(this.lastMusicMessageID, { cache: false }).catch(() => undefined).then(m => m?.delete());
                 void this.textChannel.send({ embeds: [createEmbed("info", `Started playing: **[${song.data.title}](${song.data.url})**`).setThumbnail(song.data.thumbnail)] })
                     .catch(() => undefined)
-                    .then(m => this.lastMusicMessageID = m?.id)
-                    .finally(() => {
-                        this.play().catch(e => {
-                            this.textChannel.send({ embeds: [createEmbed("error", `An error occured while trying to play music\n\`\`\`${e.message}\`\`\``)] }).catch(() => null);
-                            this.connection.destroy();
-                        });
-                    });
+                    .then(m => this.lastMusicMessageID = m?.id);
             }
         });
     }
@@ -57,8 +58,8 @@ export class MusicHandler {
         this.player.stop();
     }
 
-    public async play(): Promise<void> {
-        if (this.player.state.status === AudioPlayerStatus.Playing) return;
+    public async play(oldState?: AudioPlayerState): Promise<void> {
+        if ((oldState ? (oldState.status === AudioPlayerStatus.Idle) : true) && this.player.state.status === AudioPlayerStatus.Playing) return;
 
         const song = this.songs.first();
         const timeout = 60000;
