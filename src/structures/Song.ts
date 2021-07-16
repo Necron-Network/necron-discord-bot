@@ -11,7 +11,7 @@ export class Song {
             quality: "highestaudio",
             opusEncoded: true
         });
-        const probe = await demuxProbe(stream);
+        const probe = await demuxProbe(stream.on("data", chunk => chunk));
 
         return createAudioResource(probe.stream, {
             metadata: this,
