@@ -1,5 +1,5 @@
 import { ISong } from "../typings";
-import { AudioResource, demuxProbe, createAudioResource } from "@discordjs/voice";
+import { AudioResource, createAudioResource, StreamType } from "@discordjs/voice";
 import ytdl from "discord-ytdl-core";
 
 export class Song {
@@ -11,11 +11,10 @@ export class Song {
             quality: "highestaudio",
             opusEncoded: true
         });
-        const probe = await demuxProbe(stream.on("data", chunk => chunk));
 
-        return createAudioResource(probe.stream, {
+        return createAudioResource(stream, {
             metadata: this,
-            inputType: probe.type,
+            inputType: StreamType.Opus,
             inlineVolume: true
         });
     }
