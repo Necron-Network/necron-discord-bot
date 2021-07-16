@@ -1,7 +1,7 @@
 import { Snowflake, Message, TextChannel, DMChannel, NewsChannel, Collection, ClientEvents, Guild, VoiceState, MessageOptions, MessagePayload, ReplyMessageOptions } from "discord.js";
 import { NecronClient } from "../structures/NecronClient";
-import { ServerQueue } from "../structures/ServerQueue";
 import { ServerVoiceRecorder } from "../structures/ServerVoiceRecorder";
+import { MusicHandler } from "../structures/MusicHandler";
 import { Request, Response, NextFunction, Router } from "express";
 
 export interface IRoutesComponent {
@@ -97,7 +97,7 @@ export interface IAfk {
 
 export interface IGuild extends Guild {
     client: NecronClient;
-    queue?: ServerQueue;
+    music?: MusicHandler;
     recorder?: ServerVoiceRecorder;
 }
 

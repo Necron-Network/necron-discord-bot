@@ -16,6 +16,7 @@
   },
   "main": "dist/index.js",
   "dependencies": {
+    "@discordjs/voice": "^0.5.4",
     "date-fns": "^2.22.1",
     "discord-ytdl-core": "^5.0.4",
     "discord.js": "github:discordjs/discord.js#master",

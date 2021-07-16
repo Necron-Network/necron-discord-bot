@@ -3,6 +3,7 @@ import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { isMusicPlaying } from "../../utils/decorators/MusicHelper";
 import { createEmbed } from "../../utils/createEmbed";
+import { AudioPlayerStatus } from "@discordjs/voice";
 
 @DefineCommand({
     aliases: ["np"],
@@ -13,7 +14,7 @@ import { createEmbed } from "../../utils/createEmbed";
 export class NowPlayingCommand extends BaseCommand {
     @isMusicPlaying()
     public execute(message: IMessage): any {
-        const song = message.guild!.queue!.songs.first()!;
-        return message.channel.send({ embeds: [createEmbed("info", `${message.guild?.queue?.playing ? "Paused" : "Playing"}: **[${song.title}](${song.url})**`).setThumbnail(song.thumbnail)] });
+        const song = message.guild!.music!.songs.first()!;
+        return message.channel.send({ embeds: [createEmbed("info", `${message.guild?.music?.player.state.status === AudioPlayerStatus.Playing ? "Playing" : "Paused"}: **[${song.data.title}](${song.data.url})**`).setThumbnail(song.data.thumbnail)] });
     }
 }

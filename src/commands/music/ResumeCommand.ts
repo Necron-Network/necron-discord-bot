@@ -3,7 +3,7 @@ import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { isUserInTheVoiceChannel, isMusicPlaying, isSameVoiceChannel } from "../../utils/decorators/MusicHelper";
 import { createEmbed } from "../../utils/createEmbed";
-import { satisfies } from "semver";
+import { AudioPlayerStatus } from "@discordjs/voice";
 
 @DefineCommand({
     description: "Resume the music player",
@@ -15,17 +15,9 @@ export class ResumeCommand extends BaseCommand {
     @isMusicPlaying()
     @isSameVoiceChannel()
     public execute(message: IMessage): any {
-        return message.channel.send({ embeds: [createEmbed("error", "Work in Progress")] });
+        if (message.guild?.music?.player.state.status === AudioPlayerStatus.Playing) return message.channel.send({ embeds: [createEmbed("error", "The music player is not paused")] }).catch(() => null);
 
-        if (message.guild?.queue?.playing) return message.channel.send({ embeds: [createEmbed("error", "The music player is not paused")] }).catch(() => null);
-
-        message.guild!.queue!.playing = true;
-        // message.guild?.queue?.connection?.dispatcher.resume();
-        // This will be reverted
-        if (satisfies(process.version, ">=14.17.0")) {
-            // message.guild?.queue?.connection?.dispatcher.pause();
-            // message.guild?.queue?.connection?.dispatcher.resume();
-        }
+        message.guild?.music?.player.unpause();
 
         return message.channel.send({ embeds: [createEmbed("info", "The music player has been resumed")] }).catch(() => null);
     }

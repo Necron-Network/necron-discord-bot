@@ -17,14 +17,14 @@ export function inhibit(func: ICommandComponent["execute"]) {
 
 export function isMusicPlaying(): any {
     return inhibit(message => {
-        if (!message.guild?.queue) return message.channel.send({ embeds: [createEmbed("warn", "There is nothing playing")] });
+        if (!message.guild?.music) return message.channel.send({ embeds: [createEmbed("warn", "There is nothing playing")] });
     });
 }
 
 export function isSameVoiceChannel(): any {
     return inhibit(message => {
         if (!message.guild?.me?.voice.channel) return undefined;
-        const botVoiceChannel = message.guild.queue?.voiceChannel?.id ?? message.guild.me.voice.channel.id;
+        const botVoiceChannel = message.guild.music?.voiceChannel.id ?? message.guild.me.voice.channel.id;
         if (message.member?.voice.channel?.id !== botVoiceChannel) {
             return message.channel.send({ embeds: [createEmbed("warn", "You need to be in the same voice channel as mine")] });
         }

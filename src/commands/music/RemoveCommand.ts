@@ -15,22 +15,18 @@ export class RemoveCommand extends BaseCommand {
     @isUserInTheVoiceChannel()
     @isSameVoiceChannel()
     public execute(message: IMessage, args: string[]): any {
-        return message.channel.send({ embeds: [createEmbed("error", "Work in Progress")] });
-
         if (isNaN(Number(args[0]))) return message.channel.send({ embeds: [createEmbed("error", "Invalid number")] });
 
-        const songs = message.guild!.queue!.songs.array();
-        const current = message.guild!.queue!.songs.first()!;
+        const songs = message.guild!.music!.songs.array();
+        const current = message.guild!.music!.songs.first()!;
         const song = songs[parseInt(args[0]) - 1];
 
-        if (current.id === song.id) {
-            message.guild!.queue!.playing = true;
-            // message.guild?.queue?.connection?.dispatcher.once("speaking", () => message.guild?.queue?.connection?.dispatcher.end());
-            // message.guild!.queue?.connection?.dispatcher.resume();
+        if (current.data.id === song.data.id) {
+            message.guild?.music?.player.stop();
         } else {
-            message.guild?.queue?.songs.delete(message.guild!.queue!.songs.findKey(x => x.id === song.id)!);
+            message.guild?.music?.songs.delete(message.guild.music.songs.findKey(x => x.data.id === song.data.id)!);
         }
 
-        message.channel.send({ embeds: [createEmbed("info", `Remove **[${song.title}](${song.url})**`).setThumbnail(song.thumbnail)] }).catch(() => null);
+        message.channel.send({ embeds: [createEmbed("info", `Remove **[${song.data.title}](${song.data.url})**`).setThumbnail(song.data.thumbnail)] }).catch(() => null);
     }
 }
