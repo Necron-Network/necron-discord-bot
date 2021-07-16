@@ -15,7 +15,8 @@ export class Song {
 
         return createAudioResource(probe.stream, {
             metadata: this,
-            inputType: probe.type
+            inputType: probe.type,
+            inlineVolume: true
         });
     }
 }
