@@ -63,12 +63,12 @@ export class PlayCommand extends BaseCommand {
                     }
                 }).catch(() => undefined);
 
-                if (!response) return message.channel.send({ embeds: [createEmbed("error", "No valid input was given, music selection canceled")] });
+                if (!response || !response.isSelectMenu()) return message.channel.send({ embeds: [createEmbed("error", "No valid input was given, music selection canceled")] });
 
                 msg.delete().catch(() => null);
 
                 if (response.customId === "CANCEL") return message.channel.send({ embeds: [createEmbed("warn", "Music selection canceled")] });
-                video = await this.client.youtube.getVideo(videos[parseInt(response.customId.replace("MUSIC-", ""))].url);
+                video = await this.client.youtube.getVideo(videos[parseInt(response.values[0].replace("MUSIC-", ""))].url);
             } catch (err) {
                 this.client.logger.error("YT_SEARCH_ERR:", err);
                 return message.channel.send({ embeds: [createEmbed("error", `An error occured\n\`\`\`${err.message}\`\`\``)] });
