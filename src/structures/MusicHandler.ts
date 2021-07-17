@@ -59,7 +59,7 @@ export class MusicHandler {
     }
 
     public async play(oldState?: AudioPlayerState): Promise<void> {
-        if ((oldState ? (oldState.status === AudioPlayerStatus.Idle) : true) && this.player.state.status === AudioPlayerStatus.Playing) return;
+        if ((oldState ? (oldState.status !== AudioPlayerStatus.Idle) : true) && this.player.state.status === AudioPlayerStatus.Playing) return;
 
         const song = this.songs.first();
         const timeout = 60000;
@@ -82,8 +82,6 @@ export class MusicHandler {
             delete this.guild.music;
             return;
         }
-
-        this.guild.me?.voice.setDeaf(true).catch(() => null);
 
         const resource = await song.download();
         this.player.play(resource);
