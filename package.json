@@ -31,6 +31,7 @@
     "semver": "^7.3.5",
     "tslib": "^2.3.0",
     "winston": "^3.3.3",
+    "youtube-dl-exec": "^1.2.4",
     "youtube-sr": "^4.1.7",
     "ytdl-core": "^4.8.3"
   },
