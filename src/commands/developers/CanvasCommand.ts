@@ -29,6 +29,7 @@ export class CanvasCommand extends BaseCommand {
         embed.addField("📥 INPUT", input);
 
         try {
+            const avatar = await resolveImage(await (this.client.request.get(message.author.displayAvatarURL({ format: "png" })).buffer()));
             let code = args.join(" ");
             if (!code.startsWith("new Canvas")) throw new Error("the command cannot execute without new Canvas(high, width)");
             if (!code.includes(".toBufferAsync()")) code += ".toBufferAsync()";
