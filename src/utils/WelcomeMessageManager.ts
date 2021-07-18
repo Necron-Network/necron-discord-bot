@@ -1,9 +1,29 @@
 import { NecronClient } from "../structures/NecronClient";
 import { ITextChannel } from "../typings";
 import { MessageEmbedOptions, GuildMember, MessageEmbed } from "discord.js";
+// import { Canvas } from "canvas-constructor";
 
 export interface IEmbedOptions extends MessageEmbedOptions {
     enabled?: boolean;
+}
+
+export interface IWelcomeImage {
+    enabled?: boolean;
+    designId?: string;
+    background?: {
+        data: string;
+        format: string;
+    };
+    color?: {
+        profilePhotoOutline?: string;
+        title?: string;
+        description?: string;
+    };
+    size?: {
+        profilePhotoOutline?: number;
+        title?: number;
+        description?: number;
+    };
 }
 
 export interface IWelcomeMessage {
@@ -16,8 +36,29 @@ export interface IWelcomeMessage {
     };
 }
 
+export interface IWelcomeImageDesign {
+    position: {
+        profilePhoto: {
+            x: number;
+            y: number;
+        };
+        title: {
+            x: number;
+            y: number;
+        };
+        description: {
+            x: number;
+            y: number;
+        };
+    };
+}
+
 export class WelcomeMessageManager {
     public constructor(public readonly client: NecronClient) {}
+
+    public async renderImage(/* data: IWelcomeImage */): Promise<void> {
+        "a";
+    }
 
     public async sendData(data: IWelcomeMessage, member: GuildMember, embedOnly: boolean): Promise<void> {
         const ch = (await this.client.utils.fetchChannel(data.channel)) as ITextChannel|undefined;
