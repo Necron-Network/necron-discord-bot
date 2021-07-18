@@ -31,7 +31,7 @@ export class CanvasCommand extends BaseCommand {
         try {
             const avatar = await resolveImage(await (this.client.request.get(message.author.displayAvatarURL({ format: "png", size: 2048 })).buffer()));
             let code = args.join(" ");
-            if (!code.startsWith("new Canvas")) throw new Error("the command cannot execute without new Canvas(high, width)");
+            if (!code.includes("new Canvas")) throw new Error("the command cannot execute without new Canvas(width, height)");
             if (!code.includes(".toBufferAsync()")) code += ".toBufferAsync()";
 
             code.replace(/;/g, "");
