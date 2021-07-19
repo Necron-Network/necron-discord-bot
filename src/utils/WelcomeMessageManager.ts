@@ -1,19 +1,21 @@
+/* eslint-disable no-eval */
 import { NecronClient } from "../structures/NecronClient";
 import { ITextChannel } from "../typings";
 import { MessageEmbedOptions, GuildMember, MessageEmbed } from "discord.js";
-// import { Canvas } from "canvas-constructor";
+import { Canvas, resolveImage } from "canvas-constructor";
 
 export interface IEmbedOptions extends MessageEmbedOptions {
     enabled?: boolean;
 }
 
 export interface IWelcomeImage {
-    enabled?: boolean;
-    designId?: string;
-    background?: {
-        data: string;
-        format: string;
+    enabled: boolean;
+    designId: string;
+    text: {
+        title: string;
+        description: string;
     };
+    background?: string;
     color?: {
         profilePhotoOutline?: string;
         title?: string;
@@ -39,25 +41,124 @@ export interface IWelcomeMessage {
 export interface IWelcomeImageDesign {
     position: {
         profilePhoto: {
-            x: number;
-            y: number;
+            x: number|string;
+            y: number|string;
         };
         title: {
-            x: number;
-            y: number;
+            x: number|string;
+            y: number|string;
         };
         description: {
-            x: number;
-            y: number;
+            x: number|string;
+            y: number|string;
         };
     };
+    size: {
+        profilePhoto: number;
+    };
 }
+
+export const WelcomeImageDesign: Record<string, IWelcomeImageDesign> = {
+    1: {
+        position: {
+            profilePhoto: {
+                x: 325,
+                y: 500
+            },
+            title: {
+                x: 650,
+                y: 400
+            },
+            description: {
+                x: 650,
+                y: 600
+            }
+        },
+        size: {
+            profilePhoto: 256
+        }
+    },
+    2: {
+        position: {
+            profilePhoto: {
+                x: 1024,
+                y: 325
+            },
+            title: {
+                x: "1024 - (canvas.measureText(data.text.title).width / 2)",
+                y: 700
+            },
+            description: {
+                x: "1024 - (canvas.measureText(data.text.description).width / 2)",
+                y: 800
+            }
+        },
+        size: {
+            profilePhoto: 225
+        }
+    }
+};
 
 export class WelcomeMessageManager {
     public constructor(public readonly client: NecronClient) {}
 
-    public async renderImage(/* data: IWelcomeImage */): Promise<void> {
-        "a";
+    public async renderImage(imageData: IWelcomeImage, member: GuildMember): Promise<Buffer> {
+        const data = {
+            background: imageData.background,
+            color: {
+                description: imageData.color?.description ?? "#FFFFFF",
+                profilePhotoOutline: imageData.color?.profilePhotoOutline ?? "#FFFFFF",
+                title: imageData.color?.title ?? "#FFFFFF"
+            },
+            designId: imageData.designId,
+            enabled: imageData.enabled,
+            size: {
+                description: imageData.size?.description ?? 50,
+                profilePhotoOutline: imageData.size?.profilePhotoOutline ?? 0,
+                title: imageData.size?.title ?? 60
+            },
+            text: {
+                description: this.parseString(imageData.text.description, member),
+                title: this.parseString(imageData.text.title, member)
+            }
+        };
+        const design = WelcomeImageDesign[data.designId];
+        const canvas = new Canvas(2048, 1000);
+
+        if (data.background && data.background !== "transparent") {
+            const bg = await resolveImage(Buffer.from(data.background, "base64")).catch(() => undefined);
+            if (bg) canvas.printImage(bg, 0, 0, 2048, 1000);
+        }
+
+        const designData: IWelcomeImageDesign = {
+            position: {
+                description: {
+                    x: await this.client.utils.toAsync<number>(() => eval(String(design.position.description.x))).catch(() => undefined).then(x => typeof x === "number" ? x : 0),
+                    y: await this.client.utils.toAsync<number>(() => eval(String(design.position.description.y))).catch(() => undefined).then(x => typeof x === "number" ? x : 0)
+                },
+                profilePhoto: {
+                    x: await this.client.utils.toAsync<number>(() => eval(String(design.position.profilePhoto.x))).catch(() => undefined).then(x => typeof x === "number" ? x : 0),
+                    y: await this.client.utils.toAsync<number>(() => eval(String(design.position.profilePhoto.y))).catch(() => undefined).then(x => typeof x === "number" ? x : 0)
+                },
+                title: {
+                    x: await this.client.utils.toAsync<number>(() => eval(String(design.position.title.x))).catch(() => undefined).then(x => typeof x === "number" ? x : 0),
+                    y: await this.client.utils.toAsync<number>(() => eval(String(design.position.title.y))).catch(() => undefined).then(x => typeof x === "number" ? x : 0)
+                }
+            },
+            size: design.size
+        };
+
+        canvas.setColor(data.color.profilePhotoOutline)
+            .printCircle(designData.position.profilePhoto.x as number, designData.position.profilePhoto.y as number, designData.size.profilePhoto + data.size.profilePhotoOutline)
+            .printCircularImage(await resolveImage(member.user.displayAvatarURL({ format: "png", size: 2048 })), designData.position.profilePhoto.x as number, designData.position.profilePhoto.y as number, designData.size.profilePhoto, designData.size.profilePhoto as any)
+            .setColor(data.color.title)
+            .setTextSize(data.size.title)
+            .printText(data.text.title, designData.position.title.x as number, designData.position.title.y as number)
+            .setColor(data.color.description)
+            .setTextSize(data.size.description)
+            .printText(data.text.description, designData.position.description.x as number, designData.position.description.y as number);
+
+        return canvas.toBufferAsync();
     }
 
     public async sendData(data: IWelcomeMessage, member: GuildMember, embedOnly: boolean): Promise<void> {

@@ -96,4 +96,14 @@ export class NecronUtils {
             }
         };
     }
+
+    public toAsync<T>(func: () => T): Promise<T> {
+        return new Promise((resolve, reject) => {
+            try {
+                resolve(func());
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }
