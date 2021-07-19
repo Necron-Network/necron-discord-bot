@@ -133,16 +133,16 @@ export class WelcomeMessageManager {
         const designData: IWelcomeImageDesign = {
             position: {
                 description: {
-                    x: await this.client.utils.toAsync<number>(() => eval(String(design.position.description.x))).catch(() => undefined).then(x => typeof x === "number" ? x : 0),
-                    y: await this.client.utils.toAsync<number>(() => eval(String(design.position.description.y))).catch(() => undefined).then(x => typeof x === "number" ? x : 0)
+                    x: await eval(String(design.position.description.x)),
+                    y: await eval(String(design.position.description.y))
                 },
                 profilePhoto: {
-                    x: await this.client.utils.toAsync<number>(() => eval(String(design.position.profilePhoto.x))).catch(() => undefined).then(x => typeof x === "number" ? x : 0),
-                    y: await this.client.utils.toAsync<number>(() => eval(String(design.position.profilePhoto.y))).catch(() => undefined).then(x => typeof x === "number" ? x : 0)
+                    x: await eval(String(design.position.profilePhoto.x)),
+                    y: await eval(String(design.position.profilePhoto.y))
                 },
                 title: {
-                    x: await this.client.utils.toAsync<number>(() => eval(String(design.position.title.x))).catch(() => undefined).then(x => typeof x === "number" ? x : 0),
-                    y: await this.client.utils.toAsync<number>(() => eval(String(design.position.title.y))).catch(() => undefined).then(x => typeof x === "number" ? x : 0)
+                    x: await eval(String(design.position.title.x)),
+                    y: await eval(String(design.position.title.y))
                 }
             },
             size: design.size
