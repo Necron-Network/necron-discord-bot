@@ -9,7 +9,7 @@ export class VoteReminder {
         setInterval(async () => {
             const now = new Date();
             if (now.getUTCHours() === 5 && now.getUTCMinutes() === 0) {
-                await this.emit("781193213519855676");
+                await this.emit("868064476119834632");
             }
         }, 60000);
     }
