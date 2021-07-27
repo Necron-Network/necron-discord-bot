@@ -46,7 +46,7 @@
   "devDependencies": {
     "@hazmi35/eslint-config": "^4.0.0",
     "@types/express": "^4.17.13",
-    "@types/mongodb": "^3.6.19",
+    "@types/mongodb": "^4.0.7",
     "@types/morgan": "^1.9.2",
     "@types/node": "^16.3.0",
     "@types/semver": "^7.3.7",
