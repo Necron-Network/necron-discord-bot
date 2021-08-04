@@ -3,7 +3,7 @@ import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
 import { IMemberCounter } from "../../utils/MemberCounterManager";
-import { MessageReaction, User, Collection, Snowflake } from "discord.js";
+import { MessageReaction, User, Collection } from "discord.js";
 
 @DefineCommand({
     aliases: [],
@@ -137,7 +137,7 @@ export class ServerStatsCommand extends BaseCommand {
 
                         const newchannel = await message.guild!.channels.create(this.client.memberCounter.parseString(format, message.guild!), {
                             type: "GUILD_VOICE",
-                            parent: newdata.category as Snowflake
+                            parent: newdata.category
                         }).catch(() => undefined);
                         if (!newchannel) return previewmsg.edit({ embeds: [createEmbed("error", "Unable to add statistic because I was unable to create a new channel.")] });
 

@@ -68,7 +68,7 @@ export class HelpCommand extends BaseCommand {
                 }]);
             }
 
-            const msg = await message.channel.send({ embeds: [embed], components: [{ components: [menu], type: "SELECT_MENU" }] });
+            const msg = await message.channel.send({ embeds: [embed], components: [{ components: [menu] }] });
             const collector = msg.createMessageComponentCollector({
                 filter: i => {
                     void i.deferUpdate();
@@ -95,7 +95,7 @@ export class HelpCommand extends BaseCommand {
 
                 if (!current.length) return;
 
-                await msg.edit({ embeds: [embed], components: [{ components: [menu], type: "SELECT_MENU" }] });
+                await msg.edit({ embeds: [embed], components: [{ components: [menu] }] });
             });
         }
     }

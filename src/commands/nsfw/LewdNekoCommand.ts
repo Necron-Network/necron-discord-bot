@@ -38,7 +38,7 @@ export class LewdNekoCommand extends BaseCommand {
 
         const msg = await message.channel.send({
             embeds: [embed],
-            components: [{ components: [stopButton, nextButton], type: "BUTTON" }]
+            components: [{ components: [stopButton, nextButton] }]
         });
 
         const collector = msg.createMessageComponentCollector({
@@ -56,7 +56,7 @@ export class LewdNekoCommand extends BaseCommand {
                 syncEmbed();
                 await msg.edit({
                     embeds: [embed],
-                    components: [{ components: [stopButton, nextButton], type: "BUTTON" }]
+                    components: [{ components: [stopButton, nextButton] }]
                 });
             } else {
                 await msg.delete();
