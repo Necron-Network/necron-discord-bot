@@ -69,7 +69,7 @@ export class CommandManager extends Collection<string, ICommandComponent> {
             }
 
             timestamps.set(message.author.id, now);
-            this.client.setTimeout(() => {
+            setTimeout(() => {
                 timestamps.delete(message.author.id);
             }, cooldownAmount);
         } else {

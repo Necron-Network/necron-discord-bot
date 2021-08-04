@@ -47,7 +47,7 @@ export class DanbooruCommand extends BaseCommand {
 
         const msg = await message.channel.send({
             embeds: [embed],
-            components: [[stopButton, nextButton]]
+            components: [{ components: [stopButton, nextButton], type: "BUTTON" }]
         });
 
         seenPost.push(post.id);
@@ -78,7 +78,7 @@ export class DanbooruCommand extends BaseCommand {
                 syncEmbed(nextPost);
                 await msg.edit({
                     embeds: [embed],
-                    components: [[stopButton, nextButton]]
+                    components: [{ components: [stopButton, nextButton], type: "BUTTON" }]
                 });
                 seenPost.push(nextPost.id);
             } else {

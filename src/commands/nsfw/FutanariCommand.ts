@@ -38,7 +38,7 @@ export class FutanariCommand extends BaseCommand {
 
         const msg = await message.channel.send({
             embeds: [embed],
-            components: [[stopButton, nextButton]]
+            components: [{ components: [stopButton, nextButton], type: "BUTTON" }]
         });
 
         const collector = msg.createMessageComponentCollector({
@@ -56,7 +56,7 @@ export class FutanariCommand extends BaseCommand {
                 syncEmbed();
                 await msg.edit({
                     embeds: [embed],
-                    components: [[stopButton, nextButton]]
+                    components: [{ components: [stopButton, nextButton], type: "BUTTON" }]
                 });
             } else {
                 await msg.delete();

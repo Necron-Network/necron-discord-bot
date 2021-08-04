@@ -17,7 +17,7 @@ export class RemoveCommand extends BaseCommand {
     public execute(message: IMessage, args: string[]): any {
         if (isNaN(Number(args[0]))) return message.channel.send({ embeds: [createEmbed("error", "Invalid number")] });
 
-        const songs = message.guild!.music!.songs.array();
+        const songs = [...message.guild!.music!.songs.values()];
         const current = message.guild!.music!.songs.first()!;
         const song = songs[parseInt(args[0]) - 1];
 

@@ -1,4 +1,4 @@
-import { MessageEmbed, User, Snowflake } from "discord.js";
+import { MessageEmbed, User } from "discord.js";
 import { IMessage, IAntiInvite, IAfk, ITextChannel } from "../typings";
 import { DefineListener } from "../utils/decorators/DefineListener";
 import { BaseListener } from "../structures/BaseListener";
@@ -15,7 +15,7 @@ export class MessageCreateEvent extends BaseListener {
             if (message.content.split(" ").includes("--pass")) {
                 message.content = message.content.replace(" --pass", "");
             } else {
-                await ((await this.client.utils.fetchChannel(afkData.afkChannel)) as ITextChannel).messages.delete(afkData.afkMsg as Snowflake).catch(() => null);
+                await ((await this.client.utils.fetchChannel(afkData.afkChannel)) as ITextChannel).messages.delete(afkData.afkMsg).catch(() => null);
                 await afkColl.deleteOne({ user: message.author.id });
 
                 await message.channel.send({ embeds: [createEmbed("info", `Welcome back, ${message.author.username}.`)] }).catch(() => undefined).then(msg => {
@@ -26,7 +26,7 @@ export class MessageCreateEvent extends BaseListener {
             }
         }
         void (async () => {
-            for (const user of message.mentions.users.array().slice(0, 2)) {
+            for (const user of [...message.mentions.users.values()].slice(0, 2)) {
                 const userAfkData = await afkColl.findOne({ user: user.id, guild: message.guild!.id });
                 if (userAfkData) {
                     const userFetch = await this.client.utils.fetchUser(userAfkData.user);
@@ -48,7 +48,7 @@ export class MessageCreateEvent extends BaseListener {
         }).bind(this)();
 
         const data = await this.client.db!.collection<IAntiInvite>("antiinvite").findOne({ guild: message.guild!.id });
-        if (data && (/((https|http)?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|(discordapp|discord)\.com\/invite)\/.+[a-z]/g.exec(message.content)) && !data.whitelist.some(x => message.member!.roles.cache.has(x as Snowflake))) return message.delete();
+        if (data && (/((https|http)?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|(discordapp|discord)\.com\/invite)\/.+[a-z]/g.exec(message.content)) && !data.whitelist.some(x => message.member!.roles.cache.has(x))) return message.delete();
 
         if (message.content.startsWith(this.client.config.prefix)) return this.client.commands.handle(message);
 
@@ -68,6 +68,6 @@ export class MessageCreateEvent extends BaseListener {
         if (!matches) return Promise.resolve(undefined);
 
         const id = matches[1];
-        return this.client.users.fetch(id as Snowflake);
+        return this.client.users.fetch(id);
     }
 }

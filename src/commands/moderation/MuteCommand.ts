@@ -14,7 +14,7 @@ export class MuteCommand extends BaseCommand {
         if (!message.member?.permissions.has("MANAGE_ROLES")) return message.channel.send({ embeds: [createEmbed("error", "You don't have permission to use this command!")] });
         if (!message.guild?.me?.permissions.has("MANAGE_ROLES")) return message.channel.send({ embeds: [createEmbed("error", "I don't have `Manage Roles` permission to mute members!")] });
 
-        const member = message.mentions.members?.first() ?? await message.guild.members.fetch(args[0] as Snowflake).catch(() => undefined);
+        const member = message.mentions.members?.first() ?? await message.guild.members.fetch(args[0]).catch(() => undefined);
         if (!member) return message.channel.send({ embeds: [createEmbed("error", "Invalid user")] });
 
         const collection = this.client.db?.collection<IMuteRole>("muterole");
@@ -47,7 +47,7 @@ export class MuteCommand extends BaseCommand {
         await message.channel.send({ embeds: [createEmbed("success", "Successfully muted").setAuthor(member.user.tag, member.user.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))] });
 
         if (isNewRole) {
-            for (const channel of message.guild.channels.cache.array()) {
+            for (const channel of [...message.guild.channels.cache.values()]) {
                 if (channel.isThread()) continue;
 
                 await (channel as ITextChannel).permissionOverwrites.create(role.id, {

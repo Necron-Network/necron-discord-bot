@@ -54,7 +54,7 @@ export class NHentaiCommand extends BaseCommand {
                 .setFooter("Use \"Read\" button to read.")
                 .addField("Language", (gallery.tags.filter(x => (x.type === "language") && (x.name !== "translated"))[0] as INHentaiGalleryTag|undefined)?.name ?? "No Information")
                 .setAuthor(message.author.username, message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))],
-            components: [[readButton]]
+            components: [{ components: [readButton], type: "BUTTON" }]
         }).catch(() => undefined);
 
         if (!msg) return;
@@ -85,7 +85,7 @@ export class NHentaiCommand extends BaseCommand {
         const stopButton = createButton("DANGER", "Stop reading").setCustomId("STOP");
         const nextButton = createButton("PRIMARY", "Next").setEmoji("▶️").setCustomId("NEXT");
 
-        const msg = await message.channel.send({ embeds: [embed], components: [[prevButton, stopButton, nextButton]] });
+        const msg = await message.channel.send({ embeds: [embed], components: [{ components: [prevButton, stopButton, nextButton], type: "BUTTON" }] });
 
         const collector = msg.createMessageComponentCollector({
             filter: i => (i.user.id === message.author.id) && (["PREV", "STOP", "NEXT"].includes(i.customId))
@@ -104,7 +104,7 @@ export class NHentaiCommand extends BaseCommand {
             }
 
             syncEmbed();
-            await msg.edit({ embeds: [embed], components: [[prevButton, stopButton, nextButton]] });
+            await msg.edit({ embeds: [embed], components: [{ components: [prevButton, stopButton, nextButton], type: "BUTTON" }] });
         });
     }
 

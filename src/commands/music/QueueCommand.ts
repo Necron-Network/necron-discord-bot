@@ -17,7 +17,7 @@ export class QueueCommand extends BaseCommand {
     public async execute(message: IMessage): Promise<any> {
         const embed = createEmbed("info").setTitle("Music Queue").setThumbnail(this.client.user!.displayAvatarURL({ format: "png", size: 2048, dynamic: true }));
 
-        const songs = message.guild!.music!.songs.array().map((s, i) => `**${i + 1}. [${s.data.title}](${s.data.url})**`);
+        const songs = [...message.guild!.music!.songs.values()].map((s, i) => `**${i + 1}. [${s.data.title}](${s.data.url})**`);
         if (songs.length <= 10) return message.channel.send({ embeds: [embed.setDescription(songs.join("\n"))] });
 
         const pages = chunk(songs, 10);

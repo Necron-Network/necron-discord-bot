@@ -50,7 +50,7 @@ export class PlayCommand extends BaseCommand {
 
                 const msg = await message.channel.send({
                     embeds: [createEmbed("info", "Please, select one of the results from the dropdown/select menu. You can select `Cancel music selection` if you want to cancel the music selection.")],
-                    components: [[selection]]
+                    components: [{ components: [selection], type: "SELECT_MENU" }]
                 });
 
                 const response = await message.channel.awaitMessageComponent({

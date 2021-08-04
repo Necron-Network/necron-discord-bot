@@ -53,7 +53,7 @@ export class TicketCommand extends BaseCommand {
                         return;
                     }
 
-                    const m = await channel.send({ embeds: [createEmbed("info", props.description).setTitle(props.name)], components: [[createButton("PRIMARY", "Open Ticket").setCustomId("OPEN_TICKET")]] }).catch(() => undefined);
+                    const m = await channel.send({ embeds: [createEmbed("info", props.description).setTitle(props.name)], components: [{ components: [createButton("PRIMARY", "Open Ticket").setCustomId("OPEN_TICKET")], type: "BUTTON" }] }).catch(() => undefined);
                     if (!m) {
                         void message.channel.send({ embeds: [createEmbed("error", "Unable to create ticket message on that channel")], content: message.author.toString() });
                         return;
