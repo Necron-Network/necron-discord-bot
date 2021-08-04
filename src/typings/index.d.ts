@@ -260,3 +260,35 @@ export interface IMuteRole {
     guildID: string;
     roleID: string;
 }
+
+export type ITicketMessage = ITicketOpenerMessage|ITicketFirstMessage|ITicketClosedMessage;
+
+export interface ITicketOpenerMessage {
+    type: "opener";
+    id: string;
+    name: string;
+    description: string;
+    channelId: string;
+    guildId: string;
+}
+
+export interface ITicketFirstMessage {
+    type: "first";
+    id: string;
+    channelId: string;
+    guildId: string;
+}
+
+export interface ITicketClosedMessage {
+    type: "closed";
+    id: string;
+    channelId: string;
+    guildId: string;
+}
+
+export interface ITicketChannel {
+    open: boolean;
+    channelId: string;
+    openedBy: string;
+    closedBy?: string;
+}
