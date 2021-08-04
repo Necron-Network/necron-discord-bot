@@ -4,7 +4,7 @@ import { ITicketMessage } from "../typings";
 import { Interaction } from "discord.js";
 
 @DefineListener("interactionCreate")
-export class InteractionCreate extends BaseListener {
+export class InteractionCreateEvent extends BaseListener {
     public async execute(interaction: Interaction): Promise<any> {
         if (!interaction.isMessageComponent()) return;
 
