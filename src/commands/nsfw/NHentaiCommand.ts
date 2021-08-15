@@ -3,7 +3,7 @@ import { IMessage, ITextChannel, INHentaiGallery, INHentaiGalleryTag } from "../
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
 import { createButton } from "../../utils/createButton";
-import { ColorResolvable } from "discord.js";
+import { ColorResolvable, MessageActionRow } from "discord.js";
 
 @DefineCommand({
     aliases: ["nh"],
@@ -46,6 +46,7 @@ export class NHentaiCommand extends BaseCommand {
 
     private async handleGallery(gallery: INHentaiGallery, message: IMessage): Promise<any> {
         const readButton = createButton("PRIMARY", "Read").setCustomId("READ");
+        const row = new MessageActionRow().addComponents(readButton);
 
         const msg = await message.channel.send({
             embeds: [createEmbed("info").setColor("EC2854" as ColorResolvable).setTitle(gallery.title.pretty)
@@ -54,7 +55,7 @@ export class NHentaiCommand extends BaseCommand {
                 .setFooter("Use \"Read\" button to read.")
                 .addField("Language", (gallery.tags.filter(x => (x.type === "language") && (x.name !== "translated"))[0] as INHentaiGalleryTag|undefined)?.name ?? "No Information")
                 .setAuthor(message.author.username, message.author.displayAvatarURL({ format: "png", size: 2048, dynamic: true }))],
-            components: [{ components: [readButton] }]
+            components: [row]
         }).catch(() => undefined);
 
         if (!msg) return;
@@ -84,8 +85,9 @@ export class NHentaiCommand extends BaseCommand {
         const prevButton = createButton("PRIMARY", "Previous").setEmoji("◀️").setCustomId("PREV");
         const stopButton = createButton("DANGER", "Stop reading").setCustomId("STOP");
         const nextButton = createButton("PRIMARY", "Next").setEmoji("▶️").setCustomId("NEXT");
+        const row = new MessageActionRow().addComponents(prevButton, stopButton, nextButton);
 
-        const msg = await message.channel.send({ embeds: [embed], components: [{ components: [prevButton, stopButton, nextButton] }] });
+        const msg = await message.channel.send({ embeds: [embed], components: [row] });
 
         const collector = msg.createMessageComponentCollector({
             filter: i => (i.user.id === message.author.id) && (["PREV", "STOP", "NEXT"].includes(i.customId))
@@ -104,7 +106,7 @@ export class NHentaiCommand extends BaseCommand {
             }
 
             syncEmbed();
-            await msg.edit({ embeds: [embed], components: [{ components: [prevButton, stopButton, nextButton] }] });
+            await msg.edit({ embeds: [embed], components: [row] });
         });
     }
 

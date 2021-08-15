@@ -3,6 +3,7 @@ import { IMessage, IGuild, ITicketMessage, ITicketOpenerMessage } from "../../ty
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
 import { createButton } from "../../utils/createButton";
+import { MessageActionRow } from "discord.js";
 
 @DefineCommand({
     description: "Ticket utility",
@@ -53,7 +54,9 @@ export class TicketCommand extends BaseCommand {
                         return;
                     }
 
-                    const m = await channel.send({ embeds: [createEmbed("info", props.description).setTitle(props.name)], components: [{ components: [createButton("PRIMARY", "Open Ticket").setCustomId("OPEN_TICKET")] }] }).catch(() => undefined);
+                    const button = createButton("PRIMARY", "Open Ticket").setCustomId("OPEN_TICKET");
+                    const row = new MessageActionRow().addComponents(button);
+                    const m = await channel.send({ embeds: [createEmbed("info", props.description).setTitle(props.name)], components: [row] }).catch(() => undefined);
                     if (!m) {
                         void message.channel.send({ embeds: [createEmbed("error", "Unable to create ticket message on that channel")], content: message.author.toString() });
                         return;

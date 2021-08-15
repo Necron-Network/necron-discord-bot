@@ -5,9 +5,9 @@ import { IMessage, ISong, ITextChannel } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { isUserInTheVoiceChannel, isSameVoiceChannel, isValidVoiceChannel } from "../../utils/decorators/MusicHelper";
 import { createEmbed } from "../../utils/createEmbed";
-import { joinVoiceChannel, DiscordGatewayAdapterCreator } from "@discordjs/voice";
+import { joinVoiceChannel, DiscordGatewayAdapterCreator, entersState, VoiceConnectionStatus } from "@discordjs/voice";
 import { Video } from "youtube-sr";
-import { VoiceChannel, MessageSelectMenu } from "discord.js";
+import { VoiceChannel, MessageSelectMenu, MessageActionRow } from "discord.js";
 import { decodeHTML } from "entities";
 
 @DefineCommand({
@@ -48,9 +48,10 @@ export class PlayCommand extends BaseCommand {
                     value: "CANCEL"
                 });
 
+                const row = new MessageActionRow().addComponents(selection);
                 const msg = await message.channel.send({
                     embeds: [createEmbed("info", "Please, select one of the results from the dropdown/select menu. You can select `Cancel music selection` if you want to cancel the music selection.")],
-                    components: [{ components: [selection] }]
+                    components: [row]
                 });
 
                 const response = await message.channel.awaitMessageComponent({
@@ -97,6 +98,7 @@ export class PlayCommand extends BaseCommand {
                     channelId: voiceChannel.id,
                     guildId: message.guild!.id
                 }), message.guild!, message.channel as ITextChannel, voiceChannel);
+                await entersState(message.guild!.music.connection, VoiceConnectionStatus.Ready, 30000);
             } catch (error) {
                 delete message.guild?.music;
                 this.client.logger.error("PLAY_CMD_ERR:", error);

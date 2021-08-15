@@ -3,6 +3,7 @@ import { IMessage, ITextChannel, IDanbooruPost } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
 import { createButton } from "../../utils/createButton";
+import { MessageActionRow } from "discord.js";
 
 @DefineCommand({
     description: "Gives you a random danbooru image",
@@ -44,10 +45,11 @@ export class DanbooruCommand extends BaseCommand {
 
         const stopButton = createButton("DANGER", "Stop").setCustomId("STOP");
         const nextButton = createButton("PRIMARY", "Next").setEmoji("➡️").setCustomId("NEXT");
+        const row = new MessageActionRow().addComponents(stopButton, nextButton);
 
         const msg = await message.channel.send({
             embeds: [embed],
-            components: [{ components: [stopButton, nextButton] }]
+            components: [row]
         });
 
         seenPost.push(post.id);
@@ -78,7 +80,7 @@ export class DanbooruCommand extends BaseCommand {
                 syncEmbed(nextPost);
                 await msg.edit({
                     embeds: [embed],
-                    components: [{ components: [stopButton, nextButton] }]
+                    components: [row]
                 });
                 seenPost.push(nextPost.id);
             } else {

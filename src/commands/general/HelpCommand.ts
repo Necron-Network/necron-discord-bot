@@ -1,5 +1,5 @@
 import { BaseCommand } from "../../structures/BaseCommand";
-import { MessageEmbed, EmbedFieldData, MessageSelectMenu } from "discord.js";
+import { MessageEmbed, EmbedFieldData, MessageSelectMenu, MessageActionRow } from "discord.js";
 import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 
@@ -68,7 +68,9 @@ export class HelpCommand extends BaseCommand {
                 }]);
             }
 
-            const msg = await message.channel.send({ embeds: [embed], components: [{ components: [menu] }] });
+            const row = new MessageActionRow().addComponents(menu);
+
+            const msg = await message.channel.send({ embeds: [embed], components: [row] });
             const collector = msg.createMessageComponentCollector({
                 filter: i => {
                     void i.deferUpdate();
@@ -95,7 +97,7 @@ export class HelpCommand extends BaseCommand {
 
                 if (!current.length) return;
 
-                await msg.edit({ embeds: [embed], components: [{ components: [menu] }] });
+                await msg.edit({ embeds: [embed], components: [row] });
             });
         }
     }

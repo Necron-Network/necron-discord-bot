@@ -2,7 +2,6 @@ import { BaseCommand } from "../../structures/BaseCommand";
 import { IMessage, IAntiInvite } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { createEmbed } from "../../utils/createEmbed";
-import { Snowflake } from "discord.js";
 
 @DefineCommand({
     aliases: ["antiinvitelink"],
@@ -51,7 +50,7 @@ export class AntiInviteCommand extends BaseCommand {
 
             if (!args[0] || args[0].length !== 18 || isNaN(Number(args[0]))) return message.channel.send({ embeds: [createEmbed("error", "Invalid Role ID")] });
 
-            const role = message.guild?.roles.cache.get(args[0] as Snowflake) ?? await message.guild?.roles.fetch(args[0] as Snowflake)?.catch(() => undefined);
+            const role = message.guild?.roles.cache.get(args[0]) ?? await message.guild?.roles.fetch(args[0])?.catch(() => undefined);
             if (!role) return message.channel.send({ embeds: [createEmbed("error", "Invalid Role ID")] });
 
             const collection = this.client.db.collection<IAntiInvite>("antiinvite");
