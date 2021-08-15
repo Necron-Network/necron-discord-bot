@@ -40,7 +40,7 @@ export class PlayCommand extends BaseCommand {
                 const selection = new MessageSelectMenu().setCustomId("MUSIC_SELECT_MENU");
 
                 selection.addOptions(videos.map((v, i) => ({
-                    label: decodeHTML(v.title!).slice(0, 25),
+                    label: decodeHTML(v.title!).slice(0, 100),
                     value: `MUSIC-${i}`
                 })));
                 selection.addOptions({

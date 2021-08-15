@@ -16,8 +16,3 @@ A discord bot project written in TypeScript.
 
 ## License
 This project uses AGPL-3.0 license.
-
-## Bugs and Errors
-Actually, I don't maintain this project on a regular basis anymore. So, here are the lists of bugs and errors in this project:
-- Music isn't working
-- ???

@@ -3,6 +3,7 @@ import { SongManager } from "../utils/SongManager";
 import { IGuild, ITextChannel } from "../typings";
 import { VoiceConnection, AudioPlayer, createAudioPlayer, VoiceConnectionStatus, AudioPlayerStatus, AudioPlayerState } from "@discordjs/voice";
 import { Snowflake, VoiceChannel } from "discord.js";
+import { Song } from "./Song";
 
 export class MusicHandler {
     public readonly player: AudioPlayer;
@@ -27,11 +28,16 @@ export class MusicHandler {
 
         this.player.on("stateChange", (oldState, newState) => {
             if (newState.status === AudioPlayerStatus.Idle && oldState.status !== AudioPlayerStatus.Idle) {
-                const song = this.songs.first()!;
+                let song: Song|undefined = this.songs.first();
 
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                this.guild.client.logger.info(`${this.guild.client.shard ? `[Shard #${this.guild.client.shard.ids}]` : ""} Music: "${song.data.title}" on ${this.guild.name} has ended`);
+                this.guild.client.logger.info(`${this.guild.client.shard ? `[Shard #${this.guild.client.shard.ids}]` : ""} Music: "${song!.data.title}" on ${this.guild.name} has ended`);
                 this.songs.deleteFirst();
+                song = this.songs.first();
+                if (!song) {
+                    void this.play();
+                    return;
+                }
                 this.textChannel.send({ embeds: [createEmbed("info", `Started playing: **[${song.data.title}](${song.data.url})**`).setThumbnail(song.data.thumbnail)] })
                     .catch(() => undefined)
                     .finally(() => {
@@ -85,5 +91,6 @@ export class MusicHandler {
 
         const resource = await song.download();
         this.player.play(resource);
+        this.connection.subscribe(this.player);
     }
 }

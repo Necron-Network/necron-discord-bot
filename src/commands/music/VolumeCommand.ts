@@ -24,7 +24,7 @@ export class VolumeCommand extends BaseCommand {
         if (volume <= 0) return message.channel.send({ embeds: [createEmbed("error", `Please, pause the music instead of setting the volume to **\`${volume}\`**`)] });
         if (volume > 100) return message.channel.send({ embeds: [createEmbed("error", "You can't set the volume above **\`100\`**")] });
 
-        resource.volume?.setVolume(volume);
+        resource.volume?.setVolume(volume / 100);
         return message.channel.send({ embeds: [createEmbed("info", `Volume set to **\`${volume}\`**`)] }).catch(() => null);
     }
 }
