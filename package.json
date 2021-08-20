@@ -21,7 +21,7 @@
     "canvas-constructor": "^4.1.0",
     "date-fns": "^2.22.1",
     "discord.js": "^13.1.0",
-    "entities": "^2.2.0",
+    "entities": "^3.0.1",
     "express": "^4.17.1",
     "ffmpeg-static": "^4.4.0",
     "got": "^11.8.2",
