@@ -1,24 +1,18 @@
-import { BaseCommand } from "../../structures/BaseCommand";
-import { Song } from "../../structures/Song";
-import { MusicHandler } from "../../structures/MusicHandler";
-import { IMessage, ISong, ITextChannel } from "../../typings";
-import { DefineCommand } from "../../utils/decorators/DefineCommand";
-import { isUserInTheVoiceChannel, isSameVoiceChannel, isValidVoiceChannel } from "../../utils/decorators/MusicHelper";
-import { createEmbed } from "../../utils/createEmbed";
-import { joinVoiceChannel, DiscordGatewayAdapterCreator, entersState, VoiceConnectionStatus } from "@discordjs/voice";
-import { VoiceChannel, MessageSelectMenu, MessageActionRow } from "discord.js";
+import { DiscordGatewayAdapterCreator, entersState, joinVoiceChannel, VoiceConnectionStatus } from "@discordjs/voice";
+import { MessageActionRow, MessageSelectMenu, VoiceChannel } from "discord.js";
 import { decodeHTML } from "entities";
+import { BaseCommand } from "../../structures/BaseCommand";
+import { MusicHandler } from "../../structures/MusicHandler";
+import { Song } from "../../structures/Song";
+import { IMessage, ISong, ITextChannel } from "../../typings";
+import { createEmbed } from "../../utils/createEmbed";
+import { DefineCommand } from "../../utils/decorators/DefineCommand";
 
 @DefineCommand({
-    aliases: ["p"],
-    description: "Play some music",
-    name: "play",
-    usage: "{prefix}play <query|video url>"
+    devOnly: true,
+    name: "testplay"
 })
-export class PlayCommand extends BaseCommand {
-    @isUserInTheVoiceChannel()
-    @isValidVoiceChannel()
-    @isSameVoiceChannel()
+export class TestPlayCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
         if (!args.length) return message.channel.send({ embeds: [createEmbed("error", `Please, give me the name or link of the video you want to play.`)] });
 

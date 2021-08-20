@@ -14,6 +14,7 @@ import { WelcomeMessageManager } from "../utils/WelcomeMessageManager";
 import { InfractionManager } from "../utils/InfractionManager";
 import { GuildLogsManager } from "../utils/GuildLogsManager";
 import { Db } from "mongodb";
+import SoundCloud from "soundcloud.ts";
 import Youtube from "youtube-sr";
 
 export class NecronClient extends Client {
@@ -31,6 +32,7 @@ export class NecronClient extends Client {
     public readonly welcomer = new WelcomeMessageManager(this);
     public readonly infraction = new InfractionManager(this);
     public readonly logs = new GuildLogsManager(this);
+    public readonly soundcloud = new SoundCloud();
 
     public constructor(opt: ClientOptions) { super(opt); }
 

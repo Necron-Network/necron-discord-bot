@@ -111,6 +111,7 @@ export interface ISong {
     url: string;
     thumbnail: string;
     duration: number;
+    type: "youtube"|"soundcloud"|"unknown";
 }
 
 export interface INekosLifeImgResponse {
