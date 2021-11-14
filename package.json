@@ -16,7 +16,7 @@
   },
   "main": "dist/index.js",
   "dependencies": {
-    "@discordjs/voice": "^0.6.0",
+    "@discordjs/voice": "^0.7.5",
     "canvas": "^2.8.0",
     "canvas-constructor": "^4.1.0",
     "date-fns": "^2.22.1",
