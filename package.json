@@ -26,7 +26,7 @@
     "ffmpeg-static": "^4.4.0",
     "got": "^11.8.2",
     "minecraft-server-util": "^3.5.2",
-    "mongodb": "^3.6.10",
+    "mongodb": "^4.2.0",
     "morgan": "^1.10.0",
     "pretty-ms": "^7.0.1",
     "semver": "^7.3.5",
