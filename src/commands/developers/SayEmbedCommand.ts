@@ -4,7 +4,7 @@ import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { MessageEmbed, MessageEmbedOptions } from "discord.js";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function carefulEval<T>(text: string, ...params: any[]): T|undefined {
+function carefulEval<T>(text: string, context: any): T|undefined {
     try {
         // eslint-disable-next-line no-eval
         return eval(text);
