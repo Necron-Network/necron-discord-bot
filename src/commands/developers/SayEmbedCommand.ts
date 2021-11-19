@@ -22,13 +22,7 @@ export class SayEmbedCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
         const context: {params: {event: {channel_id: string}}} = { params: { event: { channel_id: message.channel.id } } };
         const parsed = carefulEval<{ content?: string; embeds?: MessageEmbedOptions[]; channel_id?: string; tts?: boolean }>(args.join(" "), context);
-        if (!parsed) throw Error();
-        for (const x of Object.keys(parsed)) {
-            if (!["embeds", "content"].includes(x)) {
-                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-                delete parsed[x as "channel_id"|"tts"];
-            }
-        }
+        if (!parsed) return message.channel.send("Unable to send message");
 
         const embeds = (parsed.embeds ?? []).map(e => new MessageEmbed(e));
         const content = parsed.content ?? "";
