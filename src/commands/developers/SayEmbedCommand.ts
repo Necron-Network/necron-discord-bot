@@ -3,6 +3,15 @@ import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { MessageEmbed, MessageEmbedOptions } from "discord.js";
 
+function carefulEval<T>(text: string): T|undefined {
+    try {
+        // eslint-disable-next-line no-eval
+        return eval(text);
+    } catch (err) {
+        return undefined;
+    }
+}
+
 @DefineCommand({
     devOnly: true,
     name: "sayembed",
@@ -10,14 +19,20 @@ import { MessageEmbed, MessageEmbedOptions } from "discord.js";
 })
 export class SayEmbedCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        try {
-            const parsed = JSON.parse(args.join(" ")) as { content?: string; embeds?: MessageEmbedOptions[] };
-            const embeds = (parsed.embeds ?? []).map(e => new MessageEmbed(e));
-            const content = parsed.content ?? "";
-
-            return message.channel.send({ content, embeds });
-        } catch (err) {
-            return message.channel.send("Unable to send message");
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const context: {params: {event: {channel_id: string}}} = { params: { event: { channel_id: message.channel.id } } };
+        const parsed = carefulEval<{ content?: string; embeds?: MessageEmbedOptions[]; channel_id?: string; tts?: boolean }>(args.join(" "));
+        if (!parsed) throw Error();
+        for (const x of Object.keys(parsed)) {
+            if (!["embeds", "content"].includes(x)) {
+                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+                delete parsed[x as "channel_id"|"tts"];
+            }
         }
+
+        const embeds = (parsed.embeds ?? []).map(e => new MessageEmbed(e));
+        const content = parsed.content ?? "";
+
+        return message.channel.send({ content, embeds });
     }
 }
