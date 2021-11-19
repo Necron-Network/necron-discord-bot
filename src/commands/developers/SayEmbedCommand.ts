@@ -7,7 +7,7 @@ import { MessageEmbed, MessageEmbedOptions } from "discord.js";
 async function carefulEval<T>(text: string, context: any): Promise<T|undefined> {
     try {
         // eslint-disable-next-line no-eval
-        return eval(text);
+        return eval(`const a = ${text}; a;`);
     } catch (err) {
         return undefined;
     }
