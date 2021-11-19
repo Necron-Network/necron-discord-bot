@@ -3,7 +3,8 @@ import { IMessage } from "../../typings";
 import { DefineCommand } from "../../utils/decorators/DefineCommand";
 import { MessageEmbed, MessageEmbedOptions } from "discord.js";
 
-function carefulEval<T>(text: string): T|undefined {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function carefulEval<T>(text: string, ...params: any[]): T|undefined {
     try {
         // eslint-disable-next-line no-eval
         return eval(text);
@@ -19,9 +20,8 @@ function carefulEval<T>(text: string): T|undefined {
 })
 export class SayEmbedCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const context: {params: {event: {channel_id: string}}} = { params: { event: { channel_id: message.channel.id } } };
-        const parsed = carefulEval<{ content?: string; embeds?: MessageEmbedOptions[]; channel_id?: string; tts?: boolean }>(args.join(" "));
+        const parsed = carefulEval<{ content?: string; embeds?: MessageEmbedOptions[]; channel_id?: string; tts?: boolean }>(args.join(" "), context);
         if (!parsed) throw Error();
         for (const x of Object.keys(parsed)) {
             if (!["embeds", "content"].includes(x)) {
