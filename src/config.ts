@@ -3,7 +3,7 @@ import { ClientOptions, ClientPresenceStatus, Intents, UserResolvable } from "di
 export const defaultPrefix = ";";
 export const devs: UserResolvable[] = ["366169273485361153", "278121557665120267"]; // NOTE: Please change this
 export const clientOptions: ClientOptions = {
-    allowedMentions: { parse: ["users", "everyone"] },
+    allowedMentions: { parse: ["users", "everyone", "roles"] },
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_INVITES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_WEBHOOKS],
     partials: ["MESSAGE", "GUILD_MEMBER", "CHANNEL", "REACTION", "USER"],
     restTimeOffset: 300,
