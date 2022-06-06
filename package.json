@@ -28,7 +28,7 @@
     "minecraft-server-util": "^3.5.2",
     "mongodb": "^3.6.10",
     "morgan": "^1.10.0",
-    "pretty-ms": "^7.0.1",
+    "pretty-ms": "^8.0.0",
     "semver": "^7.3.5",
     "soundcloud.ts": "^0.4.1",
     "tslib": "^2.3.0",
