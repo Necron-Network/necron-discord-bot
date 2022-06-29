@@ -23,7 +23,7 @@
     "discord.js": "^13.1.0",
     "entities": "^2.2.0",
     "express": "^4.17.1",
-    "ffmpeg-static": "^4.4.0",
+    "ffmpeg-static": "^5.0.2",
     "got": "^11.8.2",
     "minecraft-server-util": "^3.5.2",
     "mongodb": "^3.6.10",
