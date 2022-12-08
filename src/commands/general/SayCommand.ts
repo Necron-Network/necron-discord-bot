@@ -9,7 +9,7 @@ import { createEmbed } from "../../utils/createEmbed";
 })
 export class SayCommand extends BaseCommand {
     public async execute(message: IMessage, args: string[]): Promise<any> {
-        if (!message.member?.permissions.has("ADMINISTRATOR") && !this.client.config.devs.includes(message.author.id)) return message.channel.send({ embeds: [createEmbed("error", "You don't have `Administrator` permission to use this command!")] });
+        if (!message.member?.roles.cache.hasAll("ROLE_ID_1", "ROLE_ID_2") && !this.client.config.devs.includes(message.author.id)) return message.channel.send({ embeds: [createEmbed("error", "You don't have `Administrator` permission to use this command!")] });
 
         let channel = (message.mentions.channels.first() ?? await this.client.utils.fetchChannel(args[0]).catch(() => undefined)) as ITextChannel|undefined;
         if (channel) {
